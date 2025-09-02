@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 
-type CharacterCanvasProps = {
+type CanvasEntityProps = {
   character: {
     colors: string[];
     [key: string]: string | number | boolean | string[];
@@ -8,10 +8,7 @@ type CharacterCanvasProps = {
   scale?: number;
 };
 
-export const CharacterCanvas = ({
-  character,
-  scale = 1,
-}: CharacterCanvasProps) => {
+export const CanvasEntity = ({ character, scale = 1 }: CanvasEntityProps) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
