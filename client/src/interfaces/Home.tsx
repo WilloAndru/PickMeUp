@@ -4,11 +4,10 @@ import Entity from "../classes/entity/Entity";
 
 function Home() {
   useEffect(() => {
-    // const characters = [
+    // const characterss = [
     //   {
     //     id: 0,
     //     isCharacter: true,
-    //     image: "uwu.png",
     //     name: "Artemis",
     //     age: 25,
     //     gender: "female",
@@ -20,11 +19,24 @@ function Home() {
     //     attack: 20,
     //     attackSpeed: 1.5,
     //     movementSpeed: 5,
+    //     colors: [
+    //       "#1a1a1a",
+    //       "#f5f5f5",
+    //       "#9e9e9e",
+    //       "#ffdbac",
+    //       "#a9745b",
+    //       "#00bcd4",
+    //       "#006064",
+    //       "#4caf50",
+    //       "#1b5e20",
+    //       "#fff176",
+    //       "#c62828",
+    //       "#4e342e",
+    //     ],
     //   },
     //   {
     //     id: 1,
     //     isCharacter: true,
-    //     image: "rex.png",
     //     name: "Rex",
     //     age: 30,
     //     gender: "male",
@@ -36,11 +48,24 @@ function Home() {
     //     attack: 25,
     //     attackSpeed: 1.2,
     //     movementSpeed: 6,
+    //     colors: [
+    //       "#000000",
+    //       "#ffffff",
+    //       "#7d7d7d",
+    //       "#f1c27d",
+    //       "#8d5524",
+    //       "#1e90ff",
+    //       "#2a4d8f",
+    //       "#3b82f6",
+    //       "#1e40af",
+    //       "#f5deb3",
+    //       "#8b4513",
+    //       "#2f1b0c",
+    //     ],
     //   },
     //   {
     //     id: 2,
     //     isCharacter: true,
-    //     image: "luna.png",
     //     name: "Luna",
     //     age: 22,
     //     gender: "female",
@@ -52,10 +77,23 @@ function Home() {
     //     attack: 18,
     //     attackSpeed: 1.8,
     //     movementSpeed: 7,
+    //     colors: [
+    //       "#2d2d2d",
+    //       "#e0e0e0",
+    //       "#b0b0b0",
+    //       "#ffe0bd",
+    //       "#7d4b2b",
+    //       "#6a5acd",
+    //       "#311b92",
+    //       "#ff9800",
+    //       "#e65100",
+    //       "#ffb74d",
+    //       "#5d4037",
+    //       "#212121",
+    //     ],
     //   },
     // ];
-    // localStorage.setItem("characters", JSON.stringify(characters));
-    const characters = JSON.parse(localStorage.getItem("characters") || "[]");
+    // localStorage.setItem("characters", JSON.stringify(characterss));
   }, []);
 
   return (

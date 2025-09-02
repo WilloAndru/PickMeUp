@@ -1,44 +1,88 @@
 import { useRef, useEffect } from "react";
 
-interface CharacterCanvasProps {
-  hairColor?: string;
-  skinColor?: string;
-  clothesColor?: string;
-}
+type CharacterCanvasProps = {
+  character: {
+    colors: string[];
+    [key: string]: string | number | boolean | string[];
+  };
+  scale?: number;
+};
 
-export const CharacterCanvas: React.FC<CharacterCanvasProps> = ({
-  hairColor,
-  skinColor,
-  clothesColor,
-}) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+export const CharacterCanvas = ({
+  character,
+  scale = 1,
+}: CharacterCanvasProps) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
+    // Aplicamos referencia al canvas
     const canvas = canvasRef.current;
     if (!canvas) return;
+
+    // Generamos canvas
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const bodyImg = new Image();
-    const hairImg = new Image();
-    const clothesImg = new Image();
+    // Lista de las imagenes del cuerpo
+    const images = [
+      "/Character/black.png",
+      "/Character/white.png",
+      "/Character/gray.png",
+      "/Character/skin.png",
+      "/Character/skin-dark.png",
+      "/Character/iris.png",
+      "/Character/iris-dark.png",
+      "/Character/clothe.png",
+      "/Character/clothe-dark.png",
+      "/Character/hair-light.png",
+      "/Character/hair.png",
+      "/Character/hair-dark.png",
+    ];
 
-    bodyImg.src = "/sprites/base.png";
-    hairImg.src = "/sprites/hair.png";
-    clothesImg.src = "/sprites/clothes.png";
+    // Variables temporales
+    const loadedImages: HTMLImageElement[] = [];
+    let loaded = 0;
 
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Generamos cada imagen
+    images.forEach((src, index) => {
+      const img = new Image();
+      img.src = src;
+      img.crossOrigin = "anonymous";
 
-      ctx.drawImage(bodyImg, 0, 0);
-      ctx.drawImage(hairImg, 0, 0);
-      ctx.drawImage(clothesImg, 0, 0);
-    };
+      img.onload = () => {
+        loadedImages[index] = img;
+        loaded++;
 
-    bodyImg.onload = draw;
-    hairImg.onload = draw;
-    clothesImg.onload = draw;
-  }, [hairColor, skinColor, clothesColor]);
+        // Establecemos escalado de la imagen
+        canvas.width = loadedImages[0].width * scale;
+        canvas.height = loadedImages[0].height * scale;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  return <canvas ref={canvasRef} width={64} height={64} />;
+        loadedImages.forEach((img, i) => {
+          // Generamos canvas temporal de cada parte para evitar el bug del mismo color para todo
+          const tempCanvas = document.createElement("canvas");
+          tempCanvas.width = img.width * scale;
+          tempCanvas.height = img.height * scale;
+          const tempCtx = tempCanvas.getContext("2d")!;
+
+          // Hacemos la imagen nítida y la dibujamos
+          tempCtx.imageSmoothingEnabled = false;
+          tempCtx.drawImage(img, 0, 0, img.width * scale, img.height * scale);
+
+          // Aplicamos el color correspondiente a esta parte
+          tempCtx.globalCompositeOperation = "source-atop";
+          tempCtx.fillStyle = character.colors[i];
+          tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+          // Reseteamos el modo de composición en el temporal
+          tempCtx.globalCompositeOperation = "source-over";
+
+          // Dibujamos el resultado final de la parte en el canvas principal
+          ctx.drawImage(tempCanvas, 0, 0);
+        });
+      };
+    });
+  }, []);
+
+  return <canvas ref={canvasRef} />;
 };
