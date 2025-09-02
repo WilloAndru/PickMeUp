@@ -97,10 +97,8 @@ function Home() {
   }, []);
 
   return (
-    <main className="flex flex-col bg-medieval-bg h-screen p-8 gap-8">
-      <header>
-        <h1 className="text-4xl h-[5vh]">Pick Me Up</h1>
-      </header>
+    <main className="flex flex-col h-screen p-8 gap-8">
+      <h1 className="text-4xl h-[5vh]">Pick Me Up</h1>
       <div className="flex flex-col md:flex-row gap-4 h-[95vh]">
         <Link
           to="/tower"
