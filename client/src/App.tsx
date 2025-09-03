@@ -4,6 +4,7 @@ import Tower from "./interfaces/Tower";
 import Gacha from "./interfaces/Gacha";
 import Characters from "./interfaces/Characters";
 import TeamComposition from "./interfaces/TeamComposition";
+import Battlefield from "./interfaces/Battlefield";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Route element={<Gacha />} path="/gacha" />
         <Route element={<Characters />} path="/characters" />
         <Route element={<TeamComposition />} path="/teamComposition/:level" />
+        <Route element={<Battlefield />} path="/battlefield/:level" />
       </Routes>
     </BrowserRouter>
   );
