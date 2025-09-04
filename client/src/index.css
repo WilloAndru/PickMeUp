@@ -16,7 +16,7 @@
 }
 
 body {
-  background-color: var(--color-bg);
+  background-color: black;
 }
 
 .link,
@@ -26,8 +26,6 @@ body {
   background-color: var(--color-bg);
   padding: 1rem;
   font-size: 2rem;
-  background-color: rgba(0, 0, 0, 0.3);
-  background-blend-mode: multiply;
 }
 
 .link:hover {
