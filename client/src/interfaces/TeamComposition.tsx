@@ -3,6 +3,7 @@ import { restrictLevelsByURL } from "../utils/restrictLevelsByURL";
 import Header from "../components/Header";
 import { CanvasEntity } from "../classes/entity/CanvasEntity";
 import { useState, useEffect } from "react";
+import { FaStar } from "react-icons/fa";
 
 function TeamComposition() {
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ function TeamComposition() {
         <section className="box w-full md:w-1/2 overflow-y-auto h-1/2 md:h-full p-[2vh] gap-[2vh] grid grid-cols-2 auto-rows-auto">
           {characters.map((item: any, index: number) => (
             <button
-              className={`flex flex-col items-center justify-center gap-2 h-[35.5vh] p-4 rounded-2xl border-4 border-[var(--color-gold)] ${
+              className={`flex flex-col items-center justify-center gap-2 h-[35vh] p-4 rounded-2xl border-4 border-[var(--color-gold)] ${
                 selectedCharacters.includes(index)
                   ? "bg-[var(--color-green)]"
                   : "bg-[var(--color-bg)]"
@@ -83,9 +84,14 @@ function TeamComposition() {
               key={index}
               onClick={() => handleCharacters(index)}
             >
+              <h1 className="text-2xl">{item.name}</h1>
               <h1 className="text-2xl">Level {item.level}</h1>
-              <CanvasEntity character={item} scale={4} />
-              <h1 className="text-3xl">{item.name}</h1>
+              <CanvasEntity character={item} scale={3} />
+              <div className="flex gap-1">
+                {Array.from({ length: item.rarity }, (_, i) => (
+                  <FaStar key={i} className="text-2xl" />
+                ))}
+              </div>
             </button>
           ))}
         </section>

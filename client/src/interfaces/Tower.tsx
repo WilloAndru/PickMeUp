@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { towerLevelsData } from "../data/towerLevels/towerLevelsData";
 import Header from "../components/Header";
 
 function Tower() {
@@ -10,7 +9,7 @@ function Tower() {
 
   // Generamos la lista de Links a los niveles
   let levels = [];
-  for (let i = 1; i <= towerLevelsData.length; i++) {
+  for (let i = 1; i <= 10; i++) {
     const isDisabled = i > lastClearedLevel;
     levels.push(
       <Link
