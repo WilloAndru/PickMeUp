@@ -66,13 +66,15 @@ export const CanvasEntity = ({ character, scale = 1 }: CanvasEntityProps) => {
           tempCtx.imageSmoothingEnabled = false;
           tempCtx.drawImage(img, 0, 0, img.width * scale, img.height * scale);
 
-          // Aplicamos el color correspondiente a esta parte
-          tempCtx.globalCompositeOperation = "source-atop";
-          tempCtx.fillStyle = character.colors[i];
-          tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+          // Solo aplicamos color si es color aleatorio
+          if (i > 2) {
+            tempCtx.globalCompositeOperation = "source-atop";
+            tempCtx.fillStyle = character.colors[i - 3];
+            tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
 
-          // Reseteamos el modo de composición en el temporal
-          tempCtx.globalCompositeOperation = "source-over";
+            // Reseteamos el modo de composición
+            tempCtx.globalCompositeOperation = "source-over";
+          }
 
           // Dibujamos el resultado final de la parte en el canvas principal
           ctx.drawImage(tempCanvas, 0, 0);

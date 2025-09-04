@@ -6,8 +6,6 @@ function Characters() {
   return (
     <div>
       <CanvasEntity character={characters[0]} scale={8} />
-      <CanvasEntity character={characters[1]} scale={8} />
-      <CanvasEntity character={characters[2]} scale={8} />
     </div>
   );
 }

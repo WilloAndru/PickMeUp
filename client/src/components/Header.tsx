@@ -13,7 +13,7 @@ function Header({ title, showDiamonts = false }: HeaderProps) {
   return (
     <header className="flex justify-between items-center w-full h-[10vh]">
       <h1 className="text-4xl">{title}</h1>
-      <div className="flex gap-8">
+      <div className="flex gap-4">
         {showDiamonts && (
           <div className="text-3xl flex gap-4 items-center box p-4">
             <GrDiamond className="text-3xl" />

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { RiInformation2Fill } from "react-icons/ri";
 import { MdCancel } from "react-icons/md";
 import { FaStar } from "react-icons/fa";
+import { genereteNewCharacter } from "../utils/generateNewCharacter";
 
 function Gacha() {
   const navigate = useNavigate();
@@ -17,40 +18,11 @@ function Gacha() {
     if (diamonts >= costPull) {
       // localStorage.setItem("diamonts", JSON.stringify(diamonts - costPull));
       let characters = JSON.parse(localStorage.getItem("characters") || "[]");
-      const lastId = characters.at(-1).id || 0;
-      const character = {
-        id: lastId + 1,
-        isCharacter: true,
-        rarity: 3,
-        name: "Leo",
-        age: 25,
-        gender: "female",
-        curiosity: 80,
-        sociable: 60,
-        brave: 70,
-        level: 1,
-        health: 100,
-        attack: 20,
-        attackSpeed: 1.5,
-        movementSpeed: 5,
-        colors: [
-          "#1a1a1a",
-          "#f5f5f5",
-          "#9e9e9e",
-          "#ffdbac",
-          "#a9745b",
-          "#00bcd4",
-          "#006064",
-          "#4caf50",
-          "#1b5e20",
-          "#fff176",
-          "#c62828",
-          "#4e342e",
-        ],
-      };
-      localStorage.setItem("lastGetCharacter", JSON.stringify(character));
+      const lastId = characters.at(-1)?.id || 0;
+      const character = genereteNewCharacter(lastId + 1);
       characters.push(character);
       localStorage.setItem("characters", JSON.stringify(characters));
+      localStorage.setItem("lastGetCharacter", JSON.stringify(character));
       navigate("/resultsGacha");
     } else {
       setShowAdvice(true);

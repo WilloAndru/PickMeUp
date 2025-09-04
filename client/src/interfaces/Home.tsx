@@ -1,103 +1,10 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Entity from "../classes/entity/Entity";
 
 function Home() {
-  // useEffect(() => {
-  //   const characterss = [
-  //     {
-  //       id: 0,
-  //       isCharacter: true,
-  //       rarity: 1,
-  //       name: "Leo",
-  //       age: 25,
-  //       gender: "female",
-  //       curiosity: 80,
-  //       sociable: 60,
-  //       brave: 70,
-  //       level: 1,
-  //       health: 100,
-  //       attack: 20,
-  //       attackSpeed: 1.5,
-  //       movementSpeed: 5,
-  //       colors: [
-  //         "#1a1a1a",
-  //         "#f5f5f5",
-  //         "#9e9e9e",
-  //         "#ffdbac",
-  //         "#a9745b",
-  //         "#00bcd4",
-  //         "#006064",
-  //         "#4caf50",
-  //         "#1b5e20",
-  //         "#fff176",
-  //         "#c62828",
-  //         "#4e342e",
-  //       ],
-  //     },
-  //     {
-  //       id: 1,
-  //       isCharacter: true,
-  //       rarity: 2,
-  //       name: "Rex",
-  //       age: 30,
-  //       gender: "male",
-  //       curiosity: 65,
-  //       sociable: 50,
-  //       brave: 85,
-  //       level: 2,
-  //       health: 120,
-  //       attack: 25,
-  //       attackSpeed: 1.2,
-  //       movementSpeed: 6,
-  //       colors: [
-  //         "#000000",
-  //         "#ffffff",
-  //         "#7d7d7d",
-  //         "#f1c27d",
-  //         "#8d5524",
-  //         "#1e90ff",
-  //         "#2a4d8f",
-  //         "#3b82f6",
-  //         "#1e40af",
-  //         "#f5deb3",
-  //         "#8b4513",
-  //         "#2f1b0c",
-  //       ],
-  //     },
-  //     {
-  //       id: 2,
-  //       isCharacter: true,
-  //       rarity: 3,
-  //       name: "Luna",
-  //       age: 22,
-  //       gender: "female",
-  //       curiosity: 90,
-  //       sociable: 75,
-  //       brave: 60,
-  //       level: 1,
-  //       health: 90,
-  //       attack: 18,
-  //       attackSpeed: 1.8,
-  //       movementSpeed: 7,
-  //       colors: [
-  //         "#2d2d2d",
-  //         "#e0e0e0",
-  //         "#b0b0b0",
-  //         "#ffe0bd",
-  //         "#7d4b2b",
-  //         "#6a5acd",
-  //         "#311b92",
-  //         "#ff9800",
-  //         "#e65100",
-  //         "#ffb74d",
-  //         "#5d4037",
-  //         "#212121",
-  //       ],
-  //     },
-  //   ];
-  //   localStorage.setItem("characters", JSON.stringify(characterss));
-  // }, []);
+  useEffect(() => {
+    //localStorage.removeItem("characters");
+  }, []);
 
   return (
     <main className="flex flex-col h-screen p-8 gap-8">
