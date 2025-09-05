@@ -54,9 +54,9 @@ export const names = [
 export const skinColors = [
   ["#f5f5f5", "#bdbdbd"], // muy pálida, casi blanca
   ["#ffdbac", "#a9745b"], // piel clara
-  ["#e0ac69", "#b3743b"], // piel dorada / trigueña
+  ["#ffe8a3", "#d4b05a"], // piel dorada clara intensa
   ["#d1a084", "#9c6a4a"], // piel cálida intermedia
-  ["#b9815d", "#8a5a3c"], // moreno claro
+  ["#e0ac69", "#b3743b"], // piel dorada / trigueña
 ];
 
 export const irisColors = [

@@ -52,7 +52,7 @@ function Gacha() {
         </button>
       </section>
       {showAdvice && (
-        <section className="flex flex-col items-center justify-center gap-4 box absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <section className="flex flex-col items-center justify-center gap-4 box w-[90vw] md:w-[50vw] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <h1>You don&apos;t have enough money!</h1>
           <h1 className="flex items-center gap-2">
             You need {costPull - diamonts} <GrDiamond /> more to pull.
@@ -63,7 +63,7 @@ function Gacha() {
         </section>
       )}
       {showProbabilities && (
-        <section className="flex flex-col justify-center gap-4 box absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <section className="flex flex-col justify-center gap-4 box absolute w-[90vw] md:w-[50vw] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <header className="flex items-center justify-between">
             <h1>Chances of Getting Rarity</h1>
             <button

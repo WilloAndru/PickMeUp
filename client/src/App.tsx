@@ -6,6 +6,7 @@ import Characters from "./interfaces/Characters";
 import TeamComposition from "./interfaces/TeamComposition";
 import Battlefield from "./interfaces/Battlefield";
 import ResultsGacha from "./interfaces/ResultsGacha";
+import DetailsCharacter from "./interfaces/DetailsCharacter";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route element={<TeamComposition />} path="/teamComposition/:level" />
         <Route element={<Battlefield />} path="/battlefield/:level" />
         <Route element={<ResultsGacha />} path="/resultsGacha" />
+        <Route element={<DetailsCharacter />} path="/detailsCharacter/:id" />
       </Routes>
     </BrowserRouter>
   );

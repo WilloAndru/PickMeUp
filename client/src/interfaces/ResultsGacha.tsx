@@ -9,7 +9,7 @@ function ResultsGacha() {
   );
 
   return (
-    <main className="flex flex-col items-center fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-screen gap-8 p-8">
+    <main className="flex flex-col items-center fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen md:w-[60vw] h-screen gap-8 p-8">
       <Header title="Gacha Results" showDiamonts={true} />
       <section className="flex flex-col items-center justify-around box h-[90vh] w-full text-center">
         <h1>You get a new character!</h1>
