@@ -9,7 +9,7 @@ function Home() {
 
   const deleteData = () => {
     localStorage.removeItem("characters");
-    localStorage.removeItem("diamonts");
+    localStorage.removeItem("diamonds");
     window.location.reload();
   };
 

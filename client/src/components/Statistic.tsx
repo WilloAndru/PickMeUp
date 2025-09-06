@@ -3,7 +3,7 @@ import { LuSwords } from "react-icons/lu";
 import { TbBowFilled, TbEyeSearch } from "react-icons/tb";
 import { BiRun } from "react-icons/bi";
 import { FaRegHandshake, FaBrave } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const icons = [
   FaRegHeart,
@@ -15,30 +15,51 @@ const icons = [
   FaBrave,
 ];
 
+const listAttributes = [
+  "health",
+  "attack",
+  "attackSpeed",
+  "movementSpeed",
+  "curiosity",
+  "sociable",
+  "brave",
+];
+
 type StatisticProps = {
   attribute: string;
   attributeValue: number;
-  iconIndex: number;
+  index: number;
   isEditMode: boolean;
   setCountDiamonds: React.Dispatch<React.SetStateAction<number>>;
+  setNewCharacter: React.Dispatch<React.SetStateAction<any>>;
 };
 
 function Statistic({
   attribute,
   attributeValue,
-  iconIndex,
+  index,
   isEditMode,
   setCountDiamonds,
+  setNewCharacter,
 }: StatisticProps) {
-  const limit = JSON.parse(localStorage.getItem("diamonts") || "20");
-  const Icon = icons[iconIndex];
+  const limit = JSON.parse(localStorage.getItem("diamonds") || "20");
+  const Icon = icons[index];
   const [diamondComponent, setDiamondComponent] = useState(0);
+
+  useEffect(() => {
+    setDiamondComponent(0);
+  }, [isEditMode]);
 
   const handleLevelUp = (isPlus: boolean) => {
     setCountDiamonds((prev) => {
       if (isPlus) {
         if (prev < limit) {
           setDiamondComponent((prev) => prev + 2);
+          setNewCharacter((prev: any) => ({
+            ...prev,
+            level: prev.level + 0.5,
+            [listAttributes[index]]: prev[listAttributes[index]] + 0.5,
+          }));
           return prev + 2;
         } else {
           return prev;
@@ -46,6 +67,11 @@ function Statistic({
       } else {
         if (diamondComponent > 0) {
           setDiamondComponent((prev) => prev - 2);
+          setNewCharacter((prev: any) => ({
+            ...prev,
+            level: prev.level - 0.5,
+            [listAttributes[index]]: prev[listAttributes[index]] - 0.5,
+          }));
           return prev - 2;
         } else {
           return prev;

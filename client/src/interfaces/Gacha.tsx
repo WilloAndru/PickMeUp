@@ -9,7 +9,7 @@ import { genereteNewCharacter } from "../utils/generateNewCharacter";
 
 function Gacha() {
   const navigate = useNavigate();
-  const diamonts = JSON.parse(localStorage.getItem("diamonts") || "20");
+  const diamonts = JSON.parse(localStorage.getItem("diamonds") || "20");
   const costPull = 10;
   const [showAdvice, setShowAdvice] = useState(false);
   const [showProbabilities, setShowProbabilities] = useState(false);

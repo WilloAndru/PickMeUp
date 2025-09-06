@@ -8,7 +8,7 @@ type HeaderProps = {
 };
 
 function Header({ title, showDiamonts = false }: HeaderProps) {
-  const diamonts = JSON.parse(localStorage.getItem("diamonts") || "20");
+  const diamonts = JSON.parse(localStorage.getItem("diamonds") || "20");
 
   return (
     <header className="flex justify-between items-center w-full h-[10vh]">

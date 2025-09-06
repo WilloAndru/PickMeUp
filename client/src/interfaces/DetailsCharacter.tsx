@@ -9,11 +9,19 @@ import Statistic from "../components/Statistic";
 
 function DetailsCharacter() {
   const { id } = useParams();
-  const character = JSON.parse(localStorage.getItem("characters") || "[]")[
-    Number(id) - 1
-  ];
+  let characters = JSON.parse(localStorage.getItem("characters") || "[]");
+  const character = characters[Number(id) - 1];
+  const [newCharacter, setNewCharacter] = useState(character);
   const [isEditMode, setIsEditMode] = useState(false);
   const [countDiamonds, setCountDiamonds] = useState(0);
+
+  const handleUpdateStatistics = () => {
+    characters[Number(id) - 1] = newCharacter;
+    localStorage.setItem("characters", JSON.stringify(characters));
+    let diamonds = JSON.parse(localStorage.getItem("diamonds") || "20");
+    localStorage.setItem("diamonds", JSON.stringify(diamonds - countDiamonds));
+    window.location.reload();
+  };
 
   return (
     <main className="flex flex-col gap-4 p-8 h-screen">
@@ -23,7 +31,7 @@ function DetailsCharacter() {
           <h1 className="text-4xl flex gap-2">
             Level
             <span className={countDiamonds !== 0 ? "text-green-500" : ""}>
-              {1 + countDiamonds / 2}
+              {character.level + countDiamonds / 2}
             </span>
           </h1>
           <CanvasEntity character={character} scale={8} />
@@ -42,51 +50,58 @@ function DetailsCharacter() {
           <Statistic
             attribute="Health"
             attributeValue={character.health}
-            iconIndex={0}
+            index={0}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
+            setNewCharacter={setNewCharacter}
           />
           <Statistic
             attribute="Attack"
             attributeValue={character.attack}
-            iconIndex={1}
+            index={1}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
+            setNewCharacter={setNewCharacter}
           />
           <Statistic
             attribute="Atk Speed"
             attributeValue={character.attackSpeed}
-            iconIndex={2}
+            index={2}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
+            setNewCharacter={setNewCharacter}
           />
           <Statistic
             attribute="Mov Speed"
             attributeValue={character.movementSpeed}
-            iconIndex={3}
+            index={3}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
+            setNewCharacter={setNewCharacter}
           />
           <Statistic
             attribute="Curiosity"
             attributeValue={character.curiosity}
-            iconIndex={4}
+            index={4}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
+            setNewCharacter={setNewCharacter}
           />
           <Statistic
             attribute="Sociable"
             attributeValue={character.sociable}
-            iconIndex={5}
+            index={5}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
+            setNewCharacter={setNewCharacter}
           />
           <Statistic
             attribute="Brave"
             attributeValue={character.brave}
-            iconIndex={6}
+            index={6}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
+            setNewCharacter={setNewCharacter}
           />
           {!isEditMode ? (
             <button
@@ -99,7 +114,10 @@ function DetailsCharacter() {
           ) : (
             <footer className="flex justify-center gap-4">
               {countDiamonds !== 0 && (
-                <button className="flex gap-2 items-center justify-center link w-1/2">
+                <button
+                  onClick={handleUpdateStatistics}
+                  className="flex gap-1 items-center justify-center link w-1/2"
+                >
                   Cost: {countDiamonds} <GrDiamond />
                 </button>
               )}
