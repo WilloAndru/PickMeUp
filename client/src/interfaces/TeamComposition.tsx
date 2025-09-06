@@ -16,11 +16,13 @@ function TeamComposition() {
     Math.ceil(Number(level) / 2) >= 5 ? 4 : Math.ceil(Number(level) / 2);
 
   const characters = JSON.parse(localStorage.getItem("characters") || "[]");
-  const [selectedCharacters, setSelectedCharacters] = useState<number[]>([]);
+  const [selectedCharactersId, setSelectedCharactersId] = useState<number[]>(
+    []
+  );
   const [isTeamComplete, setIsTeamComplete] = useState(false);
 
   const handleCharacters = (index: number) => {
-    setSelectedCharacters((prev: number[]) => {
+    setSelectedCharactersId((prev: number[]) => {
       if (prev.includes(index)) {
         return prev.filter((i) => i !== index);
       } else if (prev.length >= numberSpots) {
@@ -32,10 +34,10 @@ function TeamComposition() {
   };
 
   useEffect(() => {
-    selectedCharacters.length === numberSpots
+    selectedCharactersId.length === numberSpots
       ? setIsTeamComplete(true)
       : setIsTeamComplete(false);
-  }, [selectedCharacters]);
+  }, [selectedCharactersId]);
 
   return (
     <main className="flex flex-col items-center h-screen p-[4vh] gap-[4vh]">
@@ -45,11 +47,11 @@ function TeamComposition() {
           <header className="h-[5vh] flex justify-between">
             <h1>Level {level}</h1>
             <h1>
-              {selectedCharacters.length} / {numberSpots}
+              {selectedCharactersId.length} / {numberSpots}
             </h1>
           </header>
           <section className="h-[54vh] gap-[2vh] grid grid-cols-2 auto-rows-auto">
-            {selectedCharacters.map((index) => (
+            {selectedCharactersId.map((index) => (
               <button
                 className="link flex items-center justify-center h-[24.5vh]"
                 key={index}
@@ -64,8 +66,8 @@ function TeamComposition() {
             disabled={!isTeamComplete}
             onClick={() => {
               localStorage.setItem(
-                "selectedCharacters",
-                JSON.stringify(selectedCharacters)
+                "selectedCharactersId",
+                JSON.stringify(selectedCharactersId)
               );
               navigate(`/battlefield/${level}`);
             }}
@@ -77,7 +79,7 @@ function TeamComposition() {
           {characters.map((item: any, index: number) => (
             <button
               className={`flex flex-col items-center justify-center gap-2 h-[35.3vh] p-4 rounded-2xl border-4 border-[var(--color-gold)] ${
-                selectedCharacters.includes(index)
+                selectedCharactersId.includes(index)
                   ? "bg-[var(--color-green)]"
                   : "bg-[var(--color-bg)]"
               }`}

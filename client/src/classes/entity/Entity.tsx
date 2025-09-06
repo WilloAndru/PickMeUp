@@ -1,33 +1,17 @@
-export interface EntityAttributes {
-  id: number;
-  isCharacter: boolean;
-  rarity: string;
-  name: string;
-  age: number;
-  curiosity: number;
-  sociable: number;
-  brave: number;
-  level: number;
-  health: number;
-  attack: number;
-  attackSpeed: number;
-  movementSpeed: number;
-  colors: string[];
-}
+import { CanvasEntity } from "./CanvasEntity";
 
-export class Entity {
-  attributes: EntityAttributes;
+type EntityProps = {
+  character: any;
   x: number;
   y: number;
+};
 
-  constructor(
-    attributes: EntityAttributes,
-    terrainWidth: number,
-    terrainHeight: number
-  ) {
-    this.attributes = attributes;
-    // Posición inicial aleatoria dentro del terreno
-    this.x = Math.random() * terrainWidth;
-    this.y = Math.random() * terrainHeight;
-  }
+function Entity({ character, x, y }: EntityProps) {
+  return (
+    <div className="absolute" style={{ top: `${y}px`, left: `${x}px` }}>
+      <CanvasEntity character={character} />
+    </div>
+  );
 }
+
+export default Entity;

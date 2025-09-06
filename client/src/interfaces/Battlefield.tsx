@@ -1,8 +1,9 @@
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { restrictLevelsByURL } from "../utils/restrictLevelsByURL";
-import { CanvasEntity } from "../classes/entity/CanvasEntity";
-import { Entity, type EntityAttributes } from "../classes/entity/Entity";
+import Entity from "../classes/entity/Entity";
+import Obstacle from "../classes/obstacle/Obstacle";
+import { generateObstacles } from "../utils/generateObstacles";
 
 function Battlefield() {
   const { level } = useParams();
@@ -10,22 +11,47 @@ function Battlefield() {
   if (restriction) return restriction;
 
   const cellSize = 27;
-  const widthTerrain = 20 + Number(level) * 5;
+  const widthTerrain = (20 + Number(level) * 5) * cellSize;
 
-  const [entities, setEntities] = useState<Entity[]>([]);
   const characters = JSON.parse(localStorage.getItem("characters") || "[]");
+  const selectedCharactersId = JSON.parse(
+    localStorage.getItem("selectedCharactersId") || "[]"
+  );
+  const selectedCharacters = selectedCharactersId.map(
+    (i: number) => characters[i]
+  );
+
+  const obstacles = generateObstacles(
+    widthTerrain / cellSize,
+    widthTerrain / 25,
+    widthTerrain / 25
+  );
 
   return (
-    <main className="bg-cyan-400 w-screen h-screen">
+    <main className="bg-cyan-400 w-screen h-screen flex items-center justify-center">
       <section
         className="bg-lime-500 relative"
         style={{
-          width: widthTerrain * cellSize,
-          height: widthTerrain * cellSize,
+          width: widthTerrain,
+          height: widthTerrain,
         }}
       >
-        {characters.map((item: any, index: number) => (
-          <CanvasEntity key={index} character={item} />
+        {selectedCharacters.map((item: any, index: number) => (
+          <Entity
+            key={index}
+            character={item}
+            x={widthTerrain / 4}
+            y={widthTerrain / 2}
+          />
+        ))}
+        {obstacles.map((item: any, index: number) => (
+          <Obstacle
+            key={index}
+            image={item.image}
+            x={item.x * cellSize}
+            y={item.y * cellSize + cellSize}
+            size={cellSize}
+          />
         ))}
       </section>
     </main>
