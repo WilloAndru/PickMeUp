@@ -5,6 +5,7 @@ import { RiDeleteBin5Fill } from "react-icons/ri";
 function Home() {
   useEffect(() => {
     //localStorage.removeItem("characters");
+    localStorage.setItem("lastClearedLevel", JSON.stringify(10));
   }, []);
 
   const deleteData = () => {

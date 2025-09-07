@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { restrictLevelsByURL } from "../utils/restrictLevelsByURL";
 import Entity from "../classes/entity/Entity";
 import Obstacle from "../classes/obstacle/Obstacle";
-import { generateObstacles } from "../utils/generateObstacles";
+import { generateObjects } from "../utils/generateObjects";
 
 function Battlefield() {
   const { level } = useParams();
@@ -11,7 +11,7 @@ function Battlefield() {
   if (restriction) return restriction;
 
   const cellSize = 27;
-  const widthTerrain = (20 + Number(level) * 5) * cellSize;
+  const widthTerrain = 25 * cellSize;
 
   const characters = JSON.parse(localStorage.getItem("characters") || "[]");
   const selectedCharactersId = JSON.parse(
@@ -21,14 +21,15 @@ function Battlefield() {
     (i: number) => characters[i]
   );
 
-  const obstacles = generateObstacles(
+  const { obstacles, enemies } = generateObjects(
+    Number(level),
     widthTerrain / cellSize,
-    widthTerrain / 25,
-    widthTerrain / 25
+    25,
+    25
   );
 
   return (
-    <main className="bg-cyan-400 w-screen h-screen flex items-center justify-center">
+    <main className="bg-cyan-400 w-screen h-screen flex items-center justify-center overflow-hidden">
       <section
         className="bg-lime-500 relative"
         style={{
@@ -36,14 +37,21 @@ function Battlefield() {
           height: widthTerrain,
         }}
       >
-        {selectedCharacters.map((item: any, index: number) => (
-          <Entity
-            key={index}
-            character={item}
-            x={widthTerrain / 4}
-            y={widthTerrain / 2}
-          />
-        ))}
+        {selectedCharacters.map((item: any, index: number) => {
+          const cols = Math.ceil(Math.sqrt(selectedCharacters.length));
+          const row = Math.floor(index / cols);
+          const col = index % cols;
+
+          return (
+            <Entity
+              key={index}
+              character={item}
+              x={(1 + col) * cellSize}
+              y={(1 + row) * cellSize}
+            />
+          );
+        })}
+
         {obstacles.map((item: any, index: number) => (
           <Obstacle
             key={index}
@@ -51,6 +59,14 @@ function Battlefield() {
             x={item.x * cellSize}
             y={item.y * cellSize + cellSize}
             size={cellSize}
+          />
+        ))}
+        {enemies.map((item: any, index: number) => (
+          <Entity
+            key={index}
+            character={item.character}
+            x={item.x * cellSize}
+            y={item.y * cellSize + cellSize}
           />
         ))}
       </section>
