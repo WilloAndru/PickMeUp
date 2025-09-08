@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { restrictLevelsByURL } from "../utils/restrictLevelsByURL";
 import Entity from "../classes/entity/Entity";
 import Obstacle from "../classes/obstacle/Obstacle";
 import { generateObjects } from "../utils/generateObjects";
+import { useZoom } from "../hooks/useZoom";
+import { useState, useEffect } from "react";
+import { usePan } from "../hooks/usePan";
 
 function Battlefield() {
   const { level } = useParams();
@@ -13,28 +15,40 @@ function Battlefield() {
   const cellSize = 27;
   const widthTerrain = 25 * cellSize;
 
-  const characters = JSON.parse(localStorage.getItem("characters") || "[]");
-  const selectedCharactersId = JSON.parse(
-    localStorage.getItem("selectedCharactersId") || "[]"
-  );
-  const selectedCharacters = selectedCharactersId.map(
-    (i: number) => characters[i]
-  );
+  const [selectedCharacters, setSelectedCharacters] = useState<any[]>([]);
+  const [obstacles, setObstacles] = useState<any[]>([]);
+  const [enemies, setEnemies] = useState<any[]>([]);
 
-  const { obstacles, enemies } = generateObjects(
-    Number(level),
-    widthTerrain / cellSize,
-    25,
-    25
-  );
+  useEffect(() => {
+    const chars = JSON.parse(localStorage.getItem("characters") || "[]");
+    const selectedIds = JSON.parse(
+      localStorage.getItem("selectedCharactersId") || "[]"
+    );
+    setSelectedCharacters(selectedIds.map((i: number) => chars[i]));
+
+    const { obstacles, enemies } = generateObjects(
+      Number(level),
+      widthTerrain / cellSize,
+      25,
+      25
+    );
+    setObstacles(obstacles);
+    setEnemies(enemies);
+  }, [level]);
+
+  const { zoom, containerRef } = useZoom();
+  const pan = usePan(zoom, widthTerrain);
 
   return (
     <main className="bg-cyan-400 w-screen h-screen flex items-center justify-center overflow-hidden">
       <section
-        className="bg-lime-500 relative"
+        ref={containerRef}
+        className="bg-lime-500 relative origin-center"
         style={{
           width: widthTerrain,
           height: widthTerrain,
+          transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+          transition: "transform 0.2s ease-out",
         }}
       >
         {selectedCharacters.map((item: any, index: number) => {
@@ -61,6 +75,7 @@ function Battlefield() {
             size={cellSize}
           />
         ))}
+
         {enemies.map((item: any, index: number) => (
           <Entity
             key={index}

@@ -1,3 +1,5 @@
+import React from "react";
+
 type ObstacleProps = {
   image: string;
   x: number;
@@ -21,4 +23,4 @@ function Obstacle({ image, x, y, size }: ObstacleProps) {
   );
 }
 
-export default Obstacle;
+export default React.memo(Obstacle);

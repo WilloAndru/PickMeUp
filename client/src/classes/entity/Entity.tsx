@@ -1,3 +1,4 @@
+import React from "react";
 import { CanvasEntity } from "./CanvasEntity";
 
 type EntityProps = {
@@ -14,4 +15,4 @@ function Entity({ character, x, y }: EntityProps) {
   );
 }
 
-export default Entity;
+export default React.memo(Entity);
