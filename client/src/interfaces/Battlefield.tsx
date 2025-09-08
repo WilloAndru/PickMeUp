@@ -6,11 +6,15 @@ import { generateObjects } from "../utils/generateObjects";
 import { useZoom } from "../hooks/useZoom";
 import { useState, useEffect } from "react";
 import { usePan } from "../hooks/usePan";
+import PauseMenu from "../components/PauseMenu";
+import { IoMenu } from "react-icons/io5";
 
 function Battlefield() {
   const { level } = useParams();
   const restriction = restrictLevelsByURL(Number(level), "tower");
   if (restriction) return restriction;
+
+  const [isPause, setIsPause] = useState(false);
 
   const cellSize = 27;
   const widthTerrain = 25 * cellSize;
@@ -40,7 +44,14 @@ function Battlefield() {
   const pan = usePan(zoom, widthTerrain);
 
   return (
-    <main className="bg-cyan-400 w-screen h-screen flex items-center justify-center overflow-hidden">
+    <main className="bg-cyan-400 w-screen h-screen flex items-center justify-center overflow-hidden relative">
+      <button
+        onClick={() => setIsPause(true)}
+        className="link absolute top-4 right-4 z-10"
+      >
+        <IoMenu />
+      </button>
+      {isPause && <PauseMenu setIsPause={setIsPause} />}
       <section
         ref={containerRef}
         className="bg-lime-500 relative origin-center"
