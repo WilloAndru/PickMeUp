@@ -21,6 +21,7 @@ function Battlefield() {
 
   const [selectedCharacters, setSelectedCharacters] = useState<any[]>([]);
   const [obstacles, setObstacles] = useState<any[]>([]);
+  const [restrictedCoordinates, setRestrictedCoordinates] = useState<any[]>([]);
   const [enemies, setEnemies] = useState<any[]>([]);
 
   useEffect(() => {
@@ -36,8 +37,12 @@ function Battlefield() {
       25,
       25
     );
+
     setObstacles(obstacles);
     setEnemies(enemies);
+    setRestrictedCoordinates(
+      obstacles.map((item) => ({ x: item.x, y: item.y }))
+    );
   }, [level]);
 
   const { zoom, containerRef } = useZoom();
@@ -71,8 +76,10 @@ function Battlefield() {
             <Entity
               key={index}
               character={item}
-              x={(1 + col) * cellSize}
-              y={(1 + row) * cellSize}
+              initialX={(1 + col) * cellSize}
+              initialY={(1 + row) * cellSize}
+              isPause={isPause}
+              restrictedCoordinates={restrictedCoordinates}
             />
           );
         })}
@@ -91,8 +98,10 @@ function Battlefield() {
           <Entity
             key={index}
             character={item.character}
-            x={item.x * cellSize}
-            y={item.y * cellSize + cellSize}
+            initialX={item.x * cellSize}
+            initialY={item.y * cellSize + cellSize}
+            isPause={isPause}
+            restrictedCoordinates={restrictedCoordinates}
           />
         ))}
       </section>
