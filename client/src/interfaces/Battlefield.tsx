@@ -19,30 +19,56 @@ function Battlefield() {
   const cellSize = 27;
   const widthTerrain = 25 * cellSize;
 
+  const [coordinates, setCoordinates] = useState<any[]>([]);
   const [selectedCharacters, setSelectedCharacters] = useState<any[]>([]);
   const [obstacles, setObstacles] = useState<any[]>([]);
-  const [restrictedCoordinates, setRestrictedCoordinates] = useState<any[]>([]);
   const [enemies, setEnemies] = useState<any[]>([]);
 
+  // Funcion que se ejecutauna sola vez al inico del nivel
   useEffect(() => {
+    // Extraemos los datos de los characters seleccionados
     const chars = JSON.parse(localStorage.getItem("characters") || "[]");
     const selectedIds = JSON.parse(
       localStorage.getItem("selectedCharactersId") || "[]"
     );
-    setSelectedCharacters(selectedIds.map((i: number) => chars[i]));
+    const selectedChars = selectedIds.map((i: number) => chars[i]);
 
+    // Creamos la lista de characters con la posicion incluida
+    const cols = Math.ceil(Math.sqrt(selectedChars.length));
+    const charactersWithPosition = selectedChars.map(
+      (char: any, index: number) => {
+        const row = Math.floor(index / cols);
+        const col = index % cols;
+
+        return {
+          ...char,
+          x: 1 + col,
+          y: 1 + row,
+        };
+      }
+    );
+    setSelectedCharacters(charactersWithPosition);
+
+    // Creamos la lista de enemigos y obstaculos
     const { obstacles, enemies } = generateObjects(
       Number(level),
       widthTerrain / cellSize,
       25,
       25
     );
-
     setObstacles(obstacles);
     setEnemies(enemies);
-    setRestrictedCoordinates(
-      obstacles.map((item) => ({ x: item.x, y: item.y }))
-    );
+
+    // Establecemos las coordenadas iniciales
+    setCoordinates([
+      ...charactersWithPosition.map((item: any) => ({
+        type: "Character",
+        x: item.x,
+        y: item.y,
+      })),
+      ...enemies.map((item) => ({ type: "Enemy", x: item.x, y: item.y })),
+      ...obstacles.map((item) => ({ type: "Obstacle", x: item.x, y: item.y })),
+    ]);
   }, [level]);
 
   const { zoom, containerRef } = useZoom();
@@ -56,7 +82,9 @@ function Battlefield() {
       >
         <IoMenu />
       </button>
+
       {isPause && <PauseMenu setIsPause={setIsPause} />}
+
       <section
         ref={containerRef}
         className="bg-lime-500 relative origin-center"
@@ -68,18 +96,15 @@ function Battlefield() {
         }}
       >
         {selectedCharacters.map((item: any, index: number) => {
-          const cols = Math.ceil(Math.sqrt(selectedCharacters.length));
-          const row = Math.floor(index / cols);
-          const col = index % cols;
-
           return (
             <Entity
               key={index}
               character={item}
-              initialX={(1 + col) * cellSize}
-              initialY={(1 + row) * cellSize}
+              coordinates={coordinates}
+              setCoordinates={setCoordinates}
+              initialX={item.x * cellSize}
+              initialY={item.y * cellSize}
               isPause={isPause}
-              restrictedCoordinates={restrictedCoordinates}
             />
           );
         })}
@@ -98,10 +123,11 @@ function Battlefield() {
           <Entity
             key={index}
             character={item.character}
+            coordinates={coordinates}
+            setCoordinates={setCoordinates}
             initialX={item.x * cellSize}
             initialY={item.y * cellSize + cellSize}
             isPause={isPause}
-            restrictedCoordinates={restrictedCoordinates}
           />
         ))}
       </section>
