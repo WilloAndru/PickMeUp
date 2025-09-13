@@ -14,54 +14,48 @@ export const movement = (
     )
   );
 
-  // Funcion de movimiento
-  setPosition((prev: any) => {
-    let newX = prev.x;
-    let newY = prev.y;
+  const step = 27;
 
-    const directions = ["up", "down", "left", "right"];
-    const direction = directions[Math.floor(Math.random() * directions.length)];
+  const directions = ["up", "down", "left", "right"];
+  const direction = directions[Math.floor(Math.random() * directions.length)];
 
-    const step = 27;
+  let newX = position.x;
+  let newY = position.y;
 
-    switch (direction) {
-      case "up":
-        newY -= step;
-        break;
-      case "down":
-        newY += step;
-        break;
-      case "left":
-        newX -= step;
-        break;
-      case "right":
-        newX += step;
-        break;
-    }
+  switch (direction) {
+    case "up":
+      newY -= step;
+      break;
+    case "down":
+      newY += step;
+      break;
+    case "left":
+      newX -= step;
+      break;
+    case "right":
+      newX += step;
+      break;
+  }
 
-    // Limitar movimiento dentro del mapa
-    newX = Math.max(0, Math.min(newX, 24 * step));
-    newY = Math.max(0, Math.min(newY, 24 * step));
+  // Limitar dentro del mapa
+  newX = Math.max(0, Math.min(newX, 24 * step));
+  newY = Math.max(0, Math.min(newY, 24 * step));
 
-    // Verificar si la nueva posición está restringida
-    const isRestricted = coordinates.some(
-      (coord: any) => coord.x === newX / step && coord.y === newY / step
-    );
+  // Verificar coordenadas restringidas
+  const isRestricted = coordinates.some(
+    (coord: any) => coord.x === newX / step && coord.y === newY / step
+  );
+  if (isRestricted) return; // no mover nada si está restringido
 
-    // No mover si está en coordenada restringida
-    if (isRestricted) {
-      return prev;
-    }
+  // Actualizar posición
+  setPosition({ x: newX, y: newY });
 
-    // Actualizamos las coordenadas
-    setCoordinates((prev: any) =>
-      prev.map((item: any) =>
-        item.x === position.x && item.y === position.y
-          ? { ...item, x: newX, y: newY }
-          : item
-      )
-    );
-
-    return { x: newX, y: newY };
+  // Actualizar coordinates fuera de setPosition
+  setCoordinates((prev: any) => {
+    return prev.map((item: any) => {
+      const match =
+        item.x === position.x / step && item.y === position.y / step;
+      return match ? { ...item, x: newX / step, y: newY / step } : item;
+    });
   });
 };

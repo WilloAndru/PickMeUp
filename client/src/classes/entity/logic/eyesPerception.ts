@@ -9,7 +9,6 @@ export const eyesPerception = (position: any, coordinates: any) => {
       Math.abs(obj.x - position.x) + Math.abs(obj.y - position.y);
 
     return distance <= distancePerception;
+    console.log(nearbyEntities);
   });
-
-  console.log(coordinates);
 };
