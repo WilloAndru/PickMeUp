@@ -1,6 +1,7 @@
 import { eyesPerception } from "./eyesPerception";
 
 export const movement = (
+  character: any,
   position: any,
   setPosition: any,
   coordinates: any,
@@ -8,7 +9,7 @@ export const movement = (
   coordinatesAlreadyTaken: any,
   setCoordinatesAlreadyTaken: any
 ) => {
-  // Hallamos la lista de enemigos o characters detectados
+  // Hallamos la lista de enemigos y characters detectados
   const detectedObjects = eyesPerception(
     { x: position.x / 27, y: position.y / 27 },
     coordinates.filter(
@@ -16,8 +17,39 @@ export const movement = (
     )
   );
 
-  // Funcion de movimiento en una casilla
+  // Desicion de atacar o no
+  const willAttack = (entities: any) => {
+    console.log(character.name, entities);
+  };
+
+  // Desicion de unirse o no
+  const willJoin = (entities: any) => {
+    console.log(character.name, entities);
+  };
+
+  // Decimos que hacer si se detectan entidades cerca
+  if (detectedObjects.length > 0) {
+    const charactersNear = detectedObjects.filter(
+      (item: any) => item.type === "Character"
+    );
+    if (charactersNear.length > 0) {
+      character.type === "Character"
+        ? willJoin(charactersNear)
+        : willAttack(charactersNear);
+    }
+
+    const enemiesNear = detectedObjects.filter(
+      (item: any) => item.type === "Enemy"
+    );
+    if (enemiesNear.length > 0) {
+      character.type === "Character"
+        ? willAttack(charactersNear)
+        : willJoin(charactersNear);
+    }
+  }
+
   const move = () => {
+    // Funcion de movimiento en una casilla
     const step = 27;
 
     const directions = ["up", "down", "left", "right"];
@@ -46,14 +78,19 @@ export const movement = (
       newX = Math.max(0, Math.min(newX, 24 * step));
       newY = Math.max(0, Math.min(newY, 24 * step));
 
-      // Revisar si la coordenada ya está tomada
-      return !coordinatesAlreadyTaken.some(
-        (coord: any) => coord.x === newX && coord.y === newY
+      // Retorna true solo si no está en coordinates ni coordinatesAlreadyTaken
+      return (
+        !coordinates.some(
+          (coord: any) => coord.x === newX / step && coord.y === newY / step
+        ) &&
+        !coordinatesAlreadyTaken.some(
+          (coord: any) => coord.x === newX && coord.y === newY
+        )
       );
     });
 
     // Si no hay direcciones válidas, no mover
-    if (validDirections.length === 0) return;
+    if (validDirections.length === 0) setCoordinatesAlreadyTaken([]);
 
     // Elegir aleatoriamente entre las válidas
     const direction =
@@ -88,15 +125,15 @@ export const movement = (
     // Actualizar coordenadas ya tomadas
     setCoordinatesAlreadyTaken((prev: any[]) => {
       const updated = [...prev, { x: newX, y: newY }];
-      if (updated.length > 8) updated.shift();
+      if (updated.length > 16) updated.shift();
       return updated;
     });
 
     // Actualizar coordinates
     setCoordinates((prev: any) =>
       prev.map((item: any) =>
-        item.x === position.x && item.y === position.y
-          ? { ...item, x: newX, y: newY }
+        item.x === position.x / 27 && item.y === position.y / 27
+          ? { ...item, x: newX / 27, y: newY / 27 }
           : item
       )
     );

@@ -19,7 +19,7 @@ function Entity({
   initialY,
   isPause,
 }: EntityProps) {
-  const ratioMovement = 1000 - (character.curiosity - 1) * 100;
+  const ratioMovement = 500;
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [coordinatesAlreadyTaken, setCoordinatesAlreadyTaken] = useState([]);
 
@@ -29,6 +29,7 @@ function Entity({
 
     const interval = setInterval(() => {
       movement(
+        character,
         position,
         setPosition,
         coordinates,
@@ -46,7 +47,7 @@ function Entity({
       className="absolute"
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
-        transition: `transform 0.1s linear`,
+        transition: `transform ${ratioMovement / 1000}s linear`,
       }}
     >
       <CanvasEntity character={character} />

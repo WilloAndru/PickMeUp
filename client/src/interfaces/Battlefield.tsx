@@ -53,8 +53,8 @@ function Battlefield() {
     const { obstacles, enemies } = generateObjects(
       Number(level),
       widthTerrain / cellSize,
-      25,
-      25
+      20,
+      20
     );
     setObstacles(obstacles);
     setEnemies(enemies);
@@ -126,7 +126,7 @@ function Battlefield() {
             coordinates={coordinates}
             setCoordinates={setCoordinates}
             initialX={item.x * cellSize}
-            initialY={item.y * cellSize + cellSize}
+            initialY={item.y * cellSize}
             isPause={isPause}
           />
         ))}

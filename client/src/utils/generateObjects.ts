@@ -48,14 +48,26 @@ export function generateObstacles(
 ): Obstacle[] {
   const obstacles: Obstacle[] = [];
 
+  const isFarEnough = (x: number, y: number) => {
+    return obstacles.every(
+      (o) => Math.abs(o.x - x) > 1 || Math.abs(o.y - y) > 1
+    );
+  };
+
+  const addObstacle = (image: string) => {
+    let pos;
+    do {
+      pos = getUniquePosition(cells, usedPositions);
+    } while (!isFarEnough(pos.x, pos.y)); // Reintenta si no cumple la distancia mínima
+    obstacles.push({ image, x: pos.x, y: pos.y });
+  };
+
   for (let i = 0; i < stones; i++) {
-    const { x, y } = getUniquePosition(cells, usedPositions);
-    obstacles.push({ image: "stone.png", x, y });
+    addObstacle("stone.png");
   }
 
   for (let i = 0; i < trees; i++) {
-    const { x, y } = getUniquePosition(cells, usedPositions);
-    obstacles.push({ image: "tree.png", x, y });
+    addObstacle("tree.png");
   }
 
   return obstacles;
