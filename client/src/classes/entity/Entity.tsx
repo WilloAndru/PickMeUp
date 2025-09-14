@@ -19,25 +19,34 @@ function Entity({
   initialY,
   isPause,
 }: EntityProps) {
+  const ratioMovement = 1000 - (character.curiosity - 1) * 100;
   const [position, setPosition] = useState({ x: initialX, y: initialY });
+  const [coordinatesAlreadyTaken, setCoordinatesAlreadyTaken] = useState([]);
 
   // Configuramos el intervalo para mover la entidad automáticamente
   useEffect(() => {
     if (isPause) return; // si está pausado, no hacemos nada
 
     const interval = setInterval(() => {
-      movement(position, setPosition, coordinates, setCoordinates);
-    }, 1000 / character.curiosity);
+      movement(
+        position,
+        setPosition,
+        coordinates,
+        setCoordinates,
+        coordinatesAlreadyTaken,
+        setCoordinatesAlreadyTaken
+      );
+    }, ratioMovement);
 
     return () => clearInterval(interval);
-  }, [isPause, position, coordinates]);
+  }, [isPause, position]);
 
   return (
     <div
       className="absolute"
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
-        transition: `transform 0.5s linear`,
+        transition: `transform 0.1s linear`,
       }}
     >
       <CanvasEntity character={character} />
