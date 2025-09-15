@@ -7,7 +7,8 @@ export const movement = (
   coordinates: any,
   setCoordinates: any,
   coordinatesAlreadyTaken: any,
-  setCoordinatesAlreadyTaken: any
+  setCoordinatesAlreadyTaken: any,
+  setFeeling: any
 ) => {
   // Hallamos la lista de enemigos y characters detectados
   const detectedObjects = eyesPerception(
@@ -19,33 +20,39 @@ export const movement = (
 
   // Desicion de atacar o no
   const willAttack = (entities: any) => {
-    console.log(character.name, entities);
+    const isAttack = Math.random() < character.brave / 10;
+    isAttack ? setFeeling("Angry") : setFeeling("Fear");
   };
 
   // Desicion de unirse o no
-  const willJoin = (entities: any) => {
-    console.log(character.name, entities);
-  };
+  const willJoin = (entities: any) => {};
 
   // Decimos que hacer si se detectan entidades cerca
   if (detectedObjects.length > 0) {
     const charactersNear = detectedObjects.filter(
       (item: any) => item.type === "Character"
     );
+
     if (charactersNear.length > 0) {
-      character.type === "Character"
-        ? willJoin(charactersNear)
-        : willAttack(charactersNear);
+      if (character.isCharacter) {
+        willJoin(charactersNear);
+      } else {
+        willAttack(charactersNear);
+      }
     }
 
     const enemiesNear = detectedObjects.filter(
       (item: any) => item.type === "Enemy"
     );
     if (enemiesNear.length > 0) {
-      character.type === "Character"
-        ? willAttack(charactersNear)
-        : willJoin(charactersNear);
+      if (character.isCharacter) {
+        willAttack(enemiesNear);
+      } else {
+        willJoin(enemiesNear);
+      }
     }
+  } else {
+    setFeeling("");
   }
 
   const move = () => {
@@ -84,7 +91,7 @@ export const movement = (
           (coord: any) => coord.x === newX / step && coord.y === newY / step
         ) &&
         !coordinatesAlreadyTaken.some(
-          (coord: any) => coord.x === newX && coord.y === newY
+          (coord: any) => coord.x === newX / step && coord.y === newY / step
         )
       );
     });
@@ -124,7 +131,7 @@ export const movement = (
 
     // Actualizar coordenadas ya tomadas
     setCoordinatesAlreadyTaken((prev: any[]) => {
-      const updated = [...prev, { x: newX, y: newY }];
+      const updated = [...prev, { x: newX / step, y: newY / step }];
       if (updated.length > 16) updated.shift();
       return updated;
     });
