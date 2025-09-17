@@ -40,7 +40,7 @@ function Entity({
         setCoordinatesAlreadyTaken,
         setFeeling
       );
-    }, ratioMovement);
+    }, ratioMovement * 1);
 
     return () => clearInterval(interval);
   }, [isPause, position]);

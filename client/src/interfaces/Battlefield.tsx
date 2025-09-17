@@ -53,8 +53,8 @@ function Battlefield() {
     const { obstacles, enemies } = generateObjects(
       Number(level),
       widthTerrain / cellSize,
-      20,
-      20
+      50,
+      50
     );
     setObstacles(obstacles);
     setEnemies(enemies);
@@ -119,7 +119,7 @@ function Battlefield() {
           />
         ))}
 
-        {enemies.map((item: any, index: number) => (
+        {/* {enemies.map((item: any, index: number) => (
           <Entity
             key={index}
             character={item.character}
@@ -129,7 +129,7 @@ function Battlefield() {
             initialY={item.y * cellSize}
             isPause={isPause}
           />
-        ))}
+        ))} */}
       </section>
     </main>
   );

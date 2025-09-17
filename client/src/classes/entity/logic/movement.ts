@@ -55,18 +55,27 @@ export const movement = (
     setFeeling("");
   }
 
+  // Funcion de movimiento en una casilla
   const move = () => {
-    // Funcion de movimiento en una casilla
     const step = 27;
 
-    const directions = ["up", "down", "left", "right"];
+    let newX = position.x;
+    let newY = position.y;
 
-    // Filtrar solo direcciones válidas
-    const validDirections = directions.filter((direction) => {
-      let newX = position.x;
-      let newY = position.y;
+    const getValidDirection = () => {
+      let index = 0;
 
-      switch (direction) {
+      // Ordenamos las direcciones de forma aleatoria
+      let directions = (() => {
+        const arr = ["up", "down", "left", "right"];
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      })();
+
+      switch (directions[index]) {
         case "up":
           newY -= step;
           break;
@@ -81,69 +90,48 @@ export const movement = (
           break;
       }
 
-      // Limitar dentro del mapa
+      // Limitamos la nueva posicion dentro del mapa
       newX = Math.max(0, Math.min(newX, 24 * step));
       newY = Math.max(0, Math.min(newY, 24 * step));
 
-      // Retorna true solo si no está en coordinates ni coordinatesAlreadyTaken
-      return (
-        !coordinates.some(
-          (coord: any) => coord.x === newX / step && coord.y === newY / step
-        ) &&
-        !coordinatesAlreadyTaken.some(
-          (coord: any) => coord.x === newX / step && coord.y === newY / step
-        )
+      // Verificamos que la nueva posicion no este tomada por un obstaculo o enemigo
+      const cellOccupiedByObstacle = coordinates.find(
+        (item: any) => item.x === newX / step && item.y === newY / step
       );
-    });
 
-    // Si no hay direcciones válidas, no mover
-    if (validDirections.length === 0) setCoordinatesAlreadyTaken([]);
+      // Verificamos que la nueva posicion no sea una ya ocupada
+      const cellAlreadyTaken = coordinatesAlreadyTaken.find(
+        (item: any) => item.x === newX / step && item.y === newY / step
+      );
 
-    // Elegir aleatoriamente entre las válidas
-    const direction =
-      validDirections[Math.floor(Math.random() * validDirections.length)];
+      if (!cellOccupiedByObstacle && !cellAlreadyTaken) {
+        return directions[index];
+      }
+    };
 
-    // Calcular nueva posición
-    let newX = position.x;
-    let newY = position.y;
+    // Si la nueva posicion no esta bloqueda
+    // if (!cellOccupiedByObstacle && !cellAlreadyTaken) {
+    //   // Actualizar posición
+    //   setPosition({ x: newX, y: newY });
 
-    switch (direction) {
-      case "up":
-        newY -= step;
-        break;
-      case "down":
-        newY += step;
-        break;
-      case "left":
-        newX -= step;
-        break;
-      case "right":
-        newX += step;
-        break;
-    }
+    //   // Actualizar coordenadas ya tomadas
+    //   setCoordinatesAlreadyTaken((prev: any[]) => {
+    //     const updated = [...prev, { x: newX / step, y: newY / step }];
+    //     if (updated.length > 32) updated.shift();
+    //     return updated;
+    //   });
 
-    // Limitar dentro del mapa (por si acaso)
-    newX = Math.max(0, Math.min(newX, 24 * step));
-    newY = Math.max(0, Math.min(newY, 24 * step));
-
-    // Actualizar posición
-    setPosition({ x: newX, y: newY });
-
-    // Actualizar coordenadas ya tomadas
-    setCoordinatesAlreadyTaken((prev: any[]) => {
-      const updated = [...prev, { x: newX / step, y: newY / step }];
-      if (updated.length > 16) updated.shift();
-      return updated;
-    });
-
-    // Actualizar coordinates
-    setCoordinates((prev: any) =>
-      prev.map((item: any) =>
-        item.x === position.x / 27 && item.y === position.y / 27
-          ? { ...item, x: newX / 27, y: newY / 27 }
-          : item
-      )
-    );
+    //   // Actualizar coordinates
+    //   setCoordinates((prev: any) =>
+    //     prev.map((item: any) =>
+    //       item.x === position.x / step && item.y === position.y / step
+    //         ? { ...item, x: newX / step, y: newY / step }
+    //         : item
+    //     )
+    //   );
+    // } else {
+    //   return;
+    // }
   };
   move();
 };
