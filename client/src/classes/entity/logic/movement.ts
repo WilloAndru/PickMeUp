@@ -11,8 +11,9 @@ export const movement = (
   setFeeling: any
 ) => {
   const step = 27;
-  let isForcedMovement = false;
-  let directions = ["up", "down", "left", "right"];
+  let directions = ["up", "down", "left", "right"].sort(
+    () => Math.random() - 0.5
+  );
 
   // Hallamos la lista de enemigos y characters detectados
   const detectedObjects = eyesPerception(
@@ -60,21 +61,31 @@ export const movement = (
   const willAttack = (entities: any) => {
     // Probabilidad de que decida atacar segun valentia
     const isAttack = Math.random() < character.brave / 10;
-    isForcedMovement = true;
     // Si decide atacar
     if (isAttack) {
       setFeeling("Angry");
       directions = getDirectionsToMove(true, entities.x, entities.y);
+      console.log(character.name, "Angry", directions);
     }
     // Si decide huir
     else {
       setFeeling("Fear");
       directions = getDirectionsToMove(false, entities.x, entities.y);
+      console.log(character.name, "Fear", directions);
     }
   };
 
   // Desicion de unirse o no
-  const willJoin = (entities: any) => {};
+  const willJoin = (entities: any) => {
+    // Probabilidad de que decida unirse segun sociabilidad
+    const isSocialice = Math.random() < character.sociable / 10;
+    // Si decide socializar
+    if (isSocialice) {
+      setFeeling("Happy");
+      directions = getDirectionsToMove(true, entities.x, entities.y);
+      console.log(character.name, "Happy", directions);
+    }
+  };
 
   // Decimos que hacer si se detectan entidades cerca
   if (detectedObjects.length > 0) {
@@ -109,18 +120,6 @@ export const movement = (
   const move = () => {
     // Obtenemos una casilla valida
     function getValidPosition(): { x: number; y: number } | undefined {
-      // Escojemos una direccion al azar
-      if (!isForcedMovement) {
-        directions = (() => {
-          for (let i = directions.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [directions[i], directions[j]] = [directions[j], directions[i]];
-          }
-          return directions;
-        })();
-      } else {
-      }
-
       let i = 0;
 
       while (i < directions.length) {
