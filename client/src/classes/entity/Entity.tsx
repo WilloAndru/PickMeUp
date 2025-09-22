@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { CanvasEntity } from "./CanvasEntity";
 import { movement } from "./logic/movement";
 import Thinking from "../../components/Thinking";
+import InformationEntity from "../../components/InformationEntity";
 
 type EntityProps = {
   character: any;
@@ -25,6 +26,8 @@ function Entity({
 
   const [coordinatesAlreadyTaken, setCoordinatesAlreadyTaken] = useState([]);
   const [feeling, setFeeling] = useState("");
+  const [health, setHealth] = useState(character.health);
+  const [showInformation, setShowInformation] = useState(false);
 
   // Configuramos el intervalo para mover la entidad automáticamente
   useEffect(() => {
@@ -39,7 +42,8 @@ function Entity({
         setCoordinates,
         coordinatesAlreadyTaken,
         setCoordinatesAlreadyTaken,
-        setFeeling
+        setFeeling,
+        setHealth
       );
     }, ratioMovement * 1);
 
@@ -48,12 +52,16 @@ function Entity({
 
   return (
     <div
-      className="absolute z-999"
+      className="absolute z-100"
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
         transition: `transform ${ratioMovement / 1000}s linear`,
       }}
+      onClick={() => setShowInformation(!showInformation)}
     >
+      {showInformation && (
+        <InformationEntity character={character} currentHealth={health} />
+      )}
       {feeling && <Thinking feeling={feeling} />}
       <CanvasEntity character={character} />
     </div>

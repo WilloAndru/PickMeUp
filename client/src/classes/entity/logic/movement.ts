@@ -8,12 +8,14 @@ export const movement = (
   setCoordinates: any,
   coordinatesAlreadyTaken: any,
   setCoordinatesAlreadyTaken: any,
-  setFeeling: any
+  setFeeling: any,
+  setHealth: any
 ) => {
   const step = 27;
+  let isMoving = true; // Boleano para quedarse quieto o moverse
   let directions = ["up", "down", "left", "right"].sort(
     () => Math.random() - 0.5
-  );
+  ); // Direccion aleatoria
 
   // Hallamos la lista de enemigos y characters detectados
   const detectedObjects = eyesPerception(
@@ -23,7 +25,7 @@ export const movement = (
     )
   );
 
-  // Hallamos la direccion logica para ir o alejarse de la entidad detectada
+  // Forzamos la direccion logica para acercarse o alejarse de la entidad detectada
   const getDirectionsToMove = (
     isApproach: boolean,
     posx: number,
@@ -34,7 +36,13 @@ export const movement = (
     const dx = posx - position.x / step;
     const dy = posy - position.y / step;
 
-    // Priorizamos el eje con la diferencia mayor
+    // Verificamos que esta al lado de la unidad percibida
+    if ((Math.abs(dx) === 1 && dy === 0) || (Math.abs(dy) === 1 && dx === 0)) {
+      isMoving = false;
+      return ["nextTo"];
+    }
+
+    // Hallamos el orden de direcciones con prioridad
     if (Math.abs(dx) >= Math.abs(dy)) {
       if (dx > 0) dirs.push("right");
       else if (dx < 0) dirs.push("left");
@@ -64,26 +72,29 @@ export const movement = (
     // Si decide atacar
     if (isAttack) {
       setFeeling("Angry");
-      directions = getDirectionsToMove(true, entities.x, entities.y);
-      console.log(character.name, "Angry", directions);
+      // Si esta al lado de la unidad entonces no se movera y atacara
+      if (directions[0] === "nextTo") {
+      }
+      // Si esta lejos de la unidad entonces dara una direccion para acercarse
+      else {
+        directions = getDirectionsToMove(true, entities.x, entities.y);
+      }
     }
     // Si decide huir
     else {
       setFeeling("Fear");
       directions = getDirectionsToMove(false, entities.x, entities.y);
-      console.log(character.name, "Fear", directions);
     }
   };
 
-  // Desicion de unirse o no
+  // Desicion de socializar o no
   const willJoin = (entities: any) => {
-    // Probabilidad de que decida unirse segun sociabilidad
+    // Probabilidad de que decida socializar segun sociabilidad
     const isSocialice = Math.random() < character.sociable / 10;
     // Si decide socializar
     if (isSocialice) {
       setFeeling("Happy");
       directions = getDirectionsToMove(true, entities.x, entities.y);
-      console.log(character.name, "Happy", directions);
     }
   };
 
@@ -116,7 +127,7 @@ export const movement = (
     setFeeling("");
   }
 
-  // Funcion de movimiento en una casilla
+  // Funcion de movimiento
   const move = () => {
     // Obtenemos una casilla valida
     function getValidPosition(): { x: number; y: number } | undefined {
@@ -194,5 +205,11 @@ export const movement = (
       )
     );
   };
-  move();
+
+  // Se movera o interactuara?
+  if (isMoving) {
+    move();
+  } else {
+    console.log(character.name, "quieto");
+  }
 };

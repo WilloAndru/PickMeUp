@@ -42,18 +42,23 @@ function Statistic({
   setCountDiamonds,
   setNewCharacter,
 }: StatisticProps) {
-  const limit = JSON.parse(localStorage.getItem("diamonds") || "20");
+  const limitDiamonds = JSON.parse(localStorage.getItem("diamonds") || "20");
   const Icon = icons[index];
-  const [diamondComponent, setDiamondComponent] = useState(0);
+  const [diamondComponent, setDiamondComponent] = useState(0); // Los diamantes invertidos en el atributo
+  let levelAttribute = attributeValue + diamondComponent / 4;
 
   useEffect(() => {
     setDiamondComponent(0);
   }, [isEditMode]);
 
+  // Logica de subir o bajar estadistica
   const handleLevelUp = (isPlus: boolean) => {
+    // Actualizamos la cantidad de diamantes a gastar general
     setCountDiamonds((prev) => {
+      // Si es para subir atributo
       if (isPlus) {
-        if (prev < limit) {
+        // Si no exedemos el limite de diamantes disponibles, ni superamos el nivel 10 de atributo
+        if (prev < limitDiamonds && levelAttribute < 10) {
           setDiamondComponent((prev) => prev + 2);
           setNewCharacter((prev: any) => ({
             ...prev,
@@ -64,7 +69,9 @@ function Statistic({
         } else {
           return prev;
         }
-      } else {
+      }
+      // Si es para bajar atributo
+      else {
         if (diamondComponent > 0) {
           setDiamondComponent((prev) => prev - 2);
           setNewCharacter((prev: any) => ({

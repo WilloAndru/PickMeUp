@@ -15,6 +15,7 @@ function DetailsCharacter() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [countDiamonds, setCountDiamonds] = useState(0);
 
+  // Cuando se quieran comfirmar los cambios de las estadisticas
   const handleUpdateStatistics = () => {
     characters[Number(id) - 1] = newCharacter;
     localStorage.setItem("characters", JSON.stringify(characters));
