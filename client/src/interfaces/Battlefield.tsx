@@ -53,12 +53,11 @@ function Battlefield() {
     const { obstacles, enemies } = generateObjects(
       Number(level),
       widthTerrain / cellSize,
-      50,
-      50
+      40,
+      40
     );
     setObstacles(obstacles);
     setEnemies(enemies);
-    console.log(charactersWithPosition, enemies);
 
     // Establecemos las coordenadas iniciales
     setCoordinates([
@@ -96,7 +95,7 @@ function Battlefield() {
           transition: "transform 0.2s ease-out",
         }}
       >
-        {selectedCharacters.map((item: any, index: number) => {
+        {selectedCharacters.map((item: any) => {
           return (
             <Entity
               key={item.id}
@@ -122,7 +121,7 @@ function Battlefield() {
 
         {enemies.map((item: any, index: number) => (
           <Entity
-            key={item.id - index}
+            key={index}
             character={item}
             coordinates={coordinates}
             setCoordinates={setCoordinates}

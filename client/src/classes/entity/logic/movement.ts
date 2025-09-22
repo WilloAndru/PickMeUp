@@ -10,6 +10,10 @@ export const movement = (
   setCoordinatesAlreadyTaken: any,
   setFeeling: any
 ) => {
+  const step = 27;
+  let isForcedMovement = false;
+  let directions = ["up", "down", "left", "right"];
+
   // Hallamos la lista de enemigos y characters detectados
   const detectedObjects = eyesPerception(
     { x: position.x / 27, y: position.y / 27 },
@@ -18,10 +22,55 @@ export const movement = (
     )
   );
 
+  // Hallamos la direccion logica para ir o alejarse de la entidad detectada
+  const getDirectionsToMove = (
+    isApproach: boolean,
+    posx: number,
+    posy: number
+  ) => {
+    const dirs: string[] = [];
+
+    const dx = posx - position.x / step;
+    const dy = posy - position.y / step;
+
+    // Priorizamos el eje con la diferencia mayor
+    if (Math.abs(dx) >= Math.abs(dy)) {
+      if (dx > 0) dirs.push("right");
+      else if (dx < 0) dirs.push("left");
+
+      if (dy > 0) dirs.push("down");
+      else if (dy < 0) dirs.push("up");
+    } else {
+      if (dy > 0) dirs.push("down");
+      else if (dy < 0) dirs.push("up");
+
+      if (dx > 0) dirs.push("right");
+      else if (dx < 0) dirs.push("left");
+    }
+
+    // Rellenar con las restantes para mantener las cuatro direcciones
+    const all = ["up", "down", "left", "right"];
+    const ordered = dirs.concat(all.filter((d) => !dirs.includes(d)));
+
+    // Devolvemos la lista dependiendo de si quiere acercarce o alejarse
+    return isApproach ? ordered : ordered.slice().reverse();
+  };
+
   // Desicion de atacar o no
   const willAttack = (entities: any) => {
+    // Probabilidad de que decida atacar segun valentia
     const isAttack = Math.random() < character.brave / 10;
-    isAttack ? setFeeling("Angry") : setFeeling("Fear");
+    isForcedMovement = true;
+    // Si decide atacar
+    if (isAttack) {
+      setFeeling("Angry");
+      directions = getDirectionsToMove(true, entities.x, entities.y);
+    }
+    // Si decide huir
+    else {
+      setFeeling("Fear");
+      directions = getDirectionsToMove(false, entities.x, entities.y);
+    }
   };
 
   // Desicion de unirse o no
@@ -29,26 +78,27 @@ export const movement = (
 
   // Decimos que hacer si se detectan entidades cerca
   if (detectedObjects.length > 0) {
+    // Si detecta personajes cerca
     const charactersNear = detectedObjects.filter(
       (item: any) => item.type === "Character"
     );
-
     if (charactersNear.length > 0) {
       if (character.isCharacter) {
-        willJoin(charactersNear);
+        willJoin(charactersNear[0]);
       } else {
-        willAttack(charactersNear);
+        willAttack(charactersNear[0]);
       }
     }
 
+    // Si detecta enemigos cerca
     const enemiesNear = detectedObjects.filter(
       (item: any) => item.type === "Enemy"
     );
     if (enemiesNear.length > 0) {
       if (character.isCharacter) {
-        willAttack(enemiesNear);
+        willAttack(enemiesNear[0]);
       } else {
-        willJoin(enemiesNear);
+        willJoin(enemiesNear[0]);
       }
     }
   } else {
@@ -57,19 +107,19 @@ export const movement = (
 
   // Funcion de movimiento en una casilla
   const move = () => {
-    const step = 27;
-
     // Obtenemos una casilla valida
     function getValidPosition(): { x: number; y: number } | undefined {
       // Escojemos una direccion al azar
-      let directions = (() => {
-        const arr = ["up", "down", "left", "right"];
-        for (let i = arr.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-      })();
+      if (!isForcedMovement) {
+        directions = (() => {
+          for (let i = directions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [directions[i], directions[j]] = [directions[j], directions[i]];
+          }
+          return directions;
+        })();
+      } else {
+      }
 
       let i = 0;
 
@@ -121,7 +171,6 @@ export const movement = (
     }
 
     const newPosition = getValidPosition();
-    console.log(character.name, newPosition);
     if (!newPosition) return;
 
     // Actualizamos posición

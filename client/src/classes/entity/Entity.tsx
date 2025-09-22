@@ -48,7 +48,7 @@ function Entity({
 
   return (
     <div
-      className="absolute"
+      className="absolute z-999"
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
         transition: `transform ${ratioMovement / 1000}s linear`,

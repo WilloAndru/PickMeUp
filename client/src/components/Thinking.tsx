@@ -28,9 +28,9 @@ function Thinking({ feeling }: ThinkingProps) {
   }
 
   return (
-    <section className="absolute bottom-7 -left-[2px]">
+    <section className="absolute bottom-8">
       <img src="/Entity/icons/thinking.png" alt="thinking" />
-      <div className="absolute bottom-2 left-[5px]">{icon}</div>
+      <div className="absolute bottom-[4px] left-[3px]">{icon}</div>
     </section>
   );
 }
