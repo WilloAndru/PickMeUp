@@ -1,6 +1,6 @@
 export const dataEnemies = [
   {
-    id: 1,
+    id: -1,
     isCharacter: false,
     rarity: 1,
     name: "Goblin",
@@ -26,7 +26,7 @@ export const dataEnemies = [
     ],
   },
   {
-    id: 2,
+    id: -2,
     isCharacter: false,
     rarity: 1,
     name: "Orc",
@@ -52,7 +52,7 @@ export const dataEnemies = [
     ],
   },
   {
-    id: 3,
+    id: -3,
     isCharacter: false,
     rarity: 1,
     name: "Demon",

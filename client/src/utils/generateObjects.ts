@@ -1,7 +1,7 @@
 import { dataEnemies, enemiesByLevel } from "../data/dataEnemies";
 
 type Obstacle = { image: string; x: number; y: number };
-type Enemy = { character: any; x: number; y: number };
+type Enemy = { x: number; y: number };
 
 function getUniquePosition(
   cells: number,
@@ -32,7 +32,7 @@ export function generateEnemies(
     for (const config of enemyConfigs) {
       for (let i = 0; i < config.quantity; i++) {
         const { x, y } = getUniquePosition(cells, usedPositions);
-        enemies.push({ character: dataEnemies[config.index], x, y });
+        enemies.push({ ...dataEnemies[config.index], x, y });
       }
     }
   }

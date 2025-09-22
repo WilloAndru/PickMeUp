@@ -22,6 +22,7 @@ function Entity({
 }: EntityProps) {
   const ratioMovement = 500;
   const [position, setPosition] = useState({ x: initialX, y: initialY });
+
   const [coordinatesAlreadyTaken, setCoordinatesAlreadyTaken] = useState([]);
   const [feeling, setFeeling] = useState("");
 
@@ -47,7 +48,7 @@ function Entity({
 
   return (
     <div
-      className="relative"
+      className="absolute"
       style={{
         transform: `translate(${position.x}px, ${position.y}px)`,
         transition: `transform ${ratioMovement / 1000}s linear`,

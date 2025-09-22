@@ -58,6 +58,7 @@ function Battlefield() {
     );
     setObstacles(obstacles);
     setEnemies(enemies);
+    console.log(charactersWithPosition, enemies);
 
     // Establecemos las coordenadas iniciales
     setCoordinates([
@@ -98,7 +99,7 @@ function Battlefield() {
         {selectedCharacters.map((item: any, index: number) => {
           return (
             <Entity
-              key={index}
+              key={item.id}
               character={item}
               coordinates={coordinates}
               setCoordinates={setCoordinates}
@@ -119,17 +120,17 @@ function Battlefield() {
           />
         ))}
 
-        {/* {enemies.map((item: any, index: number) => (
+        {enemies.map((item: any, index: number) => (
           <Entity
-            key={index}
-            character={item.character}
+            key={item.id - index}
+            character={item}
             coordinates={coordinates}
             setCoordinates={setCoordinates}
             initialX={item.x * cellSize}
             initialY={item.y * cellSize}
             isPause={isPause}
           />
-        ))} */}
+        ))}
       </section>
     </main>
   );
