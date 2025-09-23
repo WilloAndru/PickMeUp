@@ -11,8 +11,6 @@ export const dataEnemies = [
     level: 1,
     health: 1,
     attack: 2,
-    attackSpeed: 2,
-    movementSpeed: 3,
     colors: [
       "#4B8B3B", // piel (verde goblin)
       "#2F5E25", // piel sombra
@@ -37,8 +35,6 @@ export const dataEnemies = [
     level: 5,
     health: 6,
     attack: 5,
-    attackSpeed: 1,
-    movementSpeed: 1,
     colors: [
       "#B22222", // piel (rojo fuego)
       "#7A1C1C", // piel sombra
@@ -63,8 +59,6 @@ export const dataEnemies = [
     level: 10,
     health: 6,
     attack: 5,
-    attackSpeed: 5,
-    movementSpeed: 2,
     colors: [
       "#FF69B4", // piel
       "#C71585", // piel sombra

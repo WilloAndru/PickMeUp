@@ -65,25 +65,9 @@ function DetailsCharacter() {
             setNewCharacter={setNewCharacter}
           />
           <Statistic
-            attribute="Atk Speed"
-            attributeValue={character.attackSpeed}
-            index={2}
-            isEditMode={isEditMode}
-            setCountDiamonds={setCountDiamonds}
-            setNewCharacter={setNewCharacter}
-          />
-          <Statistic
-            attribute="Mov Speed"
-            attributeValue={character.movementSpeed}
-            index={3}
-            isEditMode={isEditMode}
-            setCountDiamonds={setCountDiamonds}
-            setNewCharacter={setNewCharacter}
-          />
-          <Statistic
             attribute="Curiosity"
             attributeValue={character.curiosity}
-            index={4}
+            index={2}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
             setNewCharacter={setNewCharacter}
@@ -91,7 +75,7 @@ function DetailsCharacter() {
           <Statistic
             attribute="Sociable"
             attributeValue={character.sociable}
-            index={5}
+            index={3}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
             setNewCharacter={setNewCharacter}
@@ -99,7 +83,7 @@ function DetailsCharacter() {
           <Statistic
             attribute="Brave"
             attributeValue={character.brave}
-            index={6}
+            index={4}
             isEditMode={isEditMode}
             setCountDiamonds={setCountDiamonds}
             setNewCharacter={setNewCharacter}

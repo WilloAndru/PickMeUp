@@ -1,29 +1,5 @@
-import { FaRegHeart } from "react-icons/fa";
-import { LuSwords } from "react-icons/lu";
-import { TbBowFilled, TbEyeSearch } from "react-icons/tb";
-import { BiRun } from "react-icons/bi";
-import { FaRegHandshake, FaBrave } from "react-icons/fa6";
 import { useEffect, useState } from "react";
-
-const icons = [
-  FaRegHeart,
-  LuSwords,
-  TbBowFilled,
-  BiRun,
-  TbEyeSearch,
-  FaRegHandshake,
-  FaBrave,
-];
-
-const listAttributes = [
-  "health",
-  "attack",
-  "attackSpeed",
-  "movementSpeed",
-  "curiosity",
-  "sociable",
-  "brave",
-];
+import { listAttributes, icons } from "../data/dataStatistics";
 
 type StatisticProps = {
   attribute: string;

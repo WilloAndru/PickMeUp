@@ -17,7 +17,7 @@ export function genereteNewCharacter(id: number) {
   const randomAge = Math.floor(Math.random() * (45 - 15 + 1)) + 15;
 
   const personalityAttributes = (() => {
-    const totalPoints = 6 * rarity;
+    const totalPoints = 3 * rarity;
     const minPerAttr = 1;
     const attrs = 3;
 
@@ -39,28 +39,25 @@ export function genereteNewCharacter(id: number) {
   })();
 
   const combatAttributes = (() => {
-    const totalPoints = 8 * rarity;
+    const totalPoints = 2 * rarity;
     const minPerAttr = 1;
-    const attrs = 4;
+    const attrs = 2;
 
     const remaining = totalPoints - minPerAttr * attrs;
 
     if (remaining < 0) {
-      return { health: 1, attack: 1, attackSpeed: 1, movementSpeed: 1 };
+      return { health: 1, attack: 1 };
     }
 
     const cut1 = Math.floor(Math.random() * (remaining + 1));
     const cut2 = Math.floor(Math.random() * (remaining + 1));
-    const cut3 = Math.floor(Math.random() * (remaining + 1));
 
-    const [first, second, third] = [cut1, cut2, cut3].sort((a, b) => a - b);
+    const [first, second] = [cut1, cut2].sort((a, b) => a - b);
 
     const health = minPerAttr + first;
     const attack = minPerAttr + (second - first);
-    const attackSpeed = minPerAttr + (third - second);
-    const movementSpeed = minPerAttr + (remaining - third);
 
-    return { health, attack, attackSpeed, movementSpeed };
+    return { health, attack };
   })();
 
   const randomColors = (() => {
@@ -83,8 +80,6 @@ export function genereteNewCharacter(id: number) {
     level: 1,
     health: combatAttributes.health,
     attack: combatAttributes.attack,
-    attackSpeed: combatAttributes.attackSpeed,
-    movementSpeed: combatAttributes.movementSpeed,
     colors: [
       skinColors[randomColors[0]][0], //piel
       skinColors[randomColors[0]][1], //piel sombra

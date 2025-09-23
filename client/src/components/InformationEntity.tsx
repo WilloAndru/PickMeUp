@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { icons } from "../data/dataStatistics";
+import React from "react";
 
 type InformationEntityProps = {
   character: any;
@@ -24,20 +26,34 @@ function InformationEntity({
   }, [percent]);
 
   return (
-    <section className="z-200 absolute top-[-30px] left-[26px] rounded border-2 border-[var(--color-gold)] bg-[var(--color-bg)] p-1 text-[6px]">
+    <section className="flex flex-col gap-[1px] z-200 absolute left-[26px] rounded border-2 border-[var(--color-gold)] bg-[var(--color-bg)] p-1 text-[6px]">
       <p>{character.name}</p>
-      <div className="w-[50px] h-4 border-2 border-[var(--color-gold)] rounded bg-gray-200">
-        <div
-          className={`h-full ${lifeColor} transition-all duration-300`}
-          style={{ width: `${percent}%` }}
-        />
+      <p>Level {character.level}</p>
+      <div className="flex items-center gap-1">
+        {React.createElement(icons[0])}
+        <div className="w-[40px] h-[8px] border-2 border-[var(--color-gold)] rounded bg-gray-200">
+          <div
+            className={`h-full ${lifeColor} transition-all duration-300 rounded-sm`}
+            style={{ width: `${percent}%` }}
+          />
+        </div>
       </div>
-      <p>{character.level}</p>
-      <p>{character.attack}</p>
-      <p>{character.attackSpeed}</p>
-      <p>{character.curiosity}</p>
-      <p>{character.sociable}</p>
-      <p>{character.brave}</p>
+      <div className="flex items-center gap-1">
+        {React.createElement(icons[1])}
+        <p>{character.attack}</p>
+      </div>
+      <div className="flex items-center gap-1">
+        {React.createElement(icons[2])}
+        <p>{character.curiosity}</p>
+      </div>
+      <div className="flex items-center gap-1">
+        {React.createElement(icons[3])}
+        <p>{character.sociable}</p>
+      </div>
+      <div className="flex items-center gap-1">
+        {React.createElement(icons[4])}
+        <p>{character.brave}</p>
+      </div>
     </section>
   );
 }
