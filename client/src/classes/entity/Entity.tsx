@@ -23,7 +23,6 @@ function Entity({
 }: EntityProps) {
   const ratioMovement = 500;
   const [position, setPosition] = useState({ x: initialX, y: initialY });
-
   const [coordinatesAlreadyTaken, setCoordinatesAlreadyTaken] = useState([]);
   const [feeling, setFeeling] = useState("");
   const [health, setHealth] = useState(character.health);
@@ -31,21 +30,25 @@ function Entity({
 
   // Configuramos el intervalo para mover la entidad automáticamente
   useEffect(() => {
-    if (isPause) return; // si está pausado, no hacemos nada
+    if (isPause) return;
 
     const interval = setInterval(() => {
-      movement(
-        character,
-        position,
-        setPosition,
-        coordinates,
-        setCoordinates,
-        coordinatesAlreadyTaken,
-        setCoordinatesAlreadyTaken,
-        setFeeling,
-        setHealth
-      );
-    }, ratioMovement * 1);
+      const isCurious = Math.random() < character.curiosity / 10;
+
+      if (isCurious) {
+        movement(
+          character,
+          position,
+          setPosition,
+          coordinates,
+          setCoordinates,
+          coordinatesAlreadyTaken,
+          setCoordinatesAlreadyTaken,
+          setFeeling,
+          setHealth
+        );
+      }
+    }, ratioMovement);
 
     return () => clearInterval(interval);
   }, [isPause, position]);
