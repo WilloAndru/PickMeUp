@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { usePan } from "../hooks/usePan";
 import PauseMenu from "../components/PauseMenu";
 import { IoMenu } from "react-icons/io5";
+import { useEntities } from "../context/Context";
 
 function Battlefield() {
   const { level } = useParams();
@@ -23,6 +24,8 @@ function Battlefield() {
   const [selectedCharacters, setSelectedCharacters] = useState<any[]>([]);
   const [obstacles, setObstacles] = useState<any[]>([]);
   const [enemies, setEnemies] = useState<any[]>([]);
+
+  const { setHealth, setIsLive } = useEntities();
 
   // Funcion que se ejecutauna sola vez al inico del nivel
   useEffect(() => {
@@ -69,6 +72,22 @@ function Battlefield() {
       ...enemies.map((item) => ({ type: "Enemy", x: item.x, y: item.y })),
       ...obstacles.map((item) => ({ type: "Obstacle", x: item.x, y: item.y })),
     ]);
+
+    // Inicializamos las variables del contexto
+    setHealth(() => {
+      const newState: Record<number, number> = {};
+      selectedCharacters.forEach((item) => {
+        newState[item.id] = item.health;
+      });
+      return newState;
+    });
+    setIsLive(() => {
+      const newState: Record<number, boolean> = {};
+      selectedCharacters.forEach((item) => {
+        newState[item.id] = true;
+      });
+      return newState;
+    });
   }, [level]);
 
   const { zoom, containerRef } = useZoom();
