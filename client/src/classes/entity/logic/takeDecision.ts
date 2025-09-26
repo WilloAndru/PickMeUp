@@ -1,12 +1,12 @@
 type Decision = { action: string; directions: string[] };
 
 export const takeDecision = (
-  detectedObjects: any,
+  detectedObject: any,
   character: any,
   setFeeling: any,
   position: any
 ): Decision => {
-  const firstEntitiDetected = detectedObjects[0]; // Trabajamos con la primera entidad detectada
+  const firstEntitiDetected = detectedObject[0]; // Trabajamos con la primera entidad detectada
 
   // Verificamos que esta al lado de la unidad percibida
   const isNearToTargetEntiti = (() => {

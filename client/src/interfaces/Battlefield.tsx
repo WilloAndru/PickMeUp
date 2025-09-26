@@ -25,7 +25,7 @@ function Battlefield() {
   const [obstacles, setObstacles] = useState<any[]>([]);
   const [enemies, setEnemies] = useState<any[]>([]);
 
-  const { setHealth, setIsLive } = useEntities();
+  const { setHealth } = useEntities();
 
   // Funcion que se ejecutauna sola vez al inico del nivel
   useEffect(() => {
@@ -64,27 +64,29 @@ function Battlefield() {
 
     // Establecemos las coordenadas iniciales
     setCoordinates([
-      ...charactersWithPosition.map((item: any) => ({
+      ...charactersWithPosition.map((item: any, index: number) => ({
+        id: index,
         type: "Character",
         x: item.x,
         y: item.y,
       })),
-      ...enemies.map((item) => ({ type: "Enemy", x: item.x, y: item.y })),
+      ...enemies.map((item, index) => ({
+        id: index + 4,
+        type: "Enemy",
+        x: item.x,
+        y: item.y,
+      })),
       ...obstacles.map((item) => ({ type: "Obstacle", x: item.x, y: item.y })),
     ]);
 
     // Inicializamos las variables del contexto
     setHealth(() => {
       const newState: Record<number, number> = {};
-      selectedCharacters.forEach((item) => {
-        newState[item.id] = item.health;
+      charactersWithPosition.forEach((item: any, index: number) => {
+        newState[index] = item.health;
       });
-      return newState;
-    });
-    setIsLive(() => {
-      const newState: Record<number, boolean> = {};
-      selectedCharacters.forEach((item) => {
-        newState[item.id] = true;
+      enemies.forEach((item: any, index: number) => {
+        newState[index + 4] = item.health;
       });
       return newState;
     });
@@ -114,10 +116,11 @@ function Battlefield() {
           transition: "transform 0.2s ease-out",
         }}
       >
-        {selectedCharacters.map((item: any) => {
+        {selectedCharacters.map((item: any, index: number) => {
           return (
             <Entity
-              key={item.id}
+              key={index}
+              id={index}
               character={item}
               coordinates={coordinates}
               setCoordinates={setCoordinates}
@@ -141,6 +144,7 @@ function Battlefield() {
         {enemies.map((item: any, index: number) => (
           <Entity
             key={index}
+            id={index + 4}
             character={item}
             coordinates={coordinates}
             setCoordinates={setCoordinates}

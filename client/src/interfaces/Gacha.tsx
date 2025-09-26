@@ -6,7 +6,6 @@ import { RiInformation2Fill } from "react-icons/ri";
 import { MdCancel } from "react-icons/md";
 import { FaStar } from "react-icons/fa";
 import { genereteNewCharacter } from "../utils/generateNewCharacter";
-import { dataEnemies } from "../data/dataEnemies";
 
 function Gacha() {
   const navigate = useNavigate();
@@ -21,7 +20,6 @@ function Gacha() {
       let characters = JSON.parse(localStorage.getItem("characters") || "[]");
       const lastId = characters.at(-1)?.id || 0;
       const character = genereteNewCharacter(lastId + 1);
-      // const character = dataEnemies[2];
       characters.push(character);
       localStorage.setItem("characters", JSON.stringify(characters));
       localStorage.setItem("lastGetCharacter", JSON.stringify(character));

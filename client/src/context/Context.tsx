@@ -2,13 +2,10 @@ import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 
 type HealthState = Record<number, number>;
-type LiveState = Record<number, boolean>;
 
 type EntitiesContextType = {
   health: HealthState;
   setHealth: React.Dispatch<React.SetStateAction<HealthState>>;
-  isLive: LiveState;
-  setIsLive: React.Dispatch<React.SetStateAction<LiveState>>;
 };
 
 const EntitiesContext = createContext<EntitiesContextType | undefined>(
@@ -17,10 +14,9 @@ const EntitiesContext = createContext<EntitiesContextType | undefined>(
 
 export function EntitiesProvider({ children }: { children: ReactNode }) {
   const [health, setHealth] = useState<HealthState>({});
-  const [isLive, setIsLive] = useState<LiveState>({});
 
   return (
-    <EntitiesContext.Provider value={{ health, setHealth, isLive, setIsLive }}>
+    <EntitiesContext.Provider value={{ health, setHealth }}>
       {children}
     </EntitiesContext.Provider>
   );
