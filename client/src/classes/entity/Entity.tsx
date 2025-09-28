@@ -37,13 +37,16 @@ function Entity({
   // Configuramos el intervalo para mover la entidad automáticamente
   useEffect(() => {
     if (isPause) return;
+    if (health[id] <= 0) return;
 
     const interval = setInterval(() => {
       // Hallamos la lista de enemigos y characters detectados
       const detectedObject = eyesPerception(
         { x: position.x / 27, y: position.y / 27 },
         coordinates.filter(
-          (item: any) => item.type === "Enemy" || item.type === "Character"
+          (item: any) =>
+            (item.type === "Enemy" || item.type === "Character") &&
+            item.id !== id
         )
       );
 
@@ -68,17 +71,15 @@ function Entity({
             decision.directions
           );
         }
-        // Si esta al lado de la entidad para atacar
+        // Si decide atacar a la unidad cercana
         else if (decision.action === "attack") {
           const damage = character.attack * 0.1;
-          const healthEntityTarget = health[detectedObject.id];
-          const newHealth = healthEntityTarget - damage;
-
-          console.log(character.name, "perdio", newHealth, "de vida");
-          // Actualizamos la vida de la entidad atacada
+          const newHealth = Number(
+            (health[detectedObject[0].id] - damage).toFixed(2)
+          );
           setHealth((prev) => ({
             ...prev,
-            [detectedObject.id]: newHealth,
+            [detectedObject[0].id]: newHealth,
           }));
         }
         // Condicional exclusivo cuando los enemigos detectan otros enemigos
@@ -119,18 +120,20 @@ function Entity({
     }, ratioMovement);
 
     return () => clearInterval(interval);
-  }, [isPause, position]);
+  }, [isPause, position, health]);
 
   // Verificamos si la entidad murio
   useEffect(() => {
+    console.log(character.name, health[id]);
     if (health[id] <= 0) {
       setIsLive(false);
       // Si muere un character lo eliminamos de la localStorage
-      if (character.type === "Character") {
+      if (character.isCharacter) {
         const chars = JSON.parse(localStorage.getItem("characters") || "[]");
         const updated = chars.filter((c: any) => c.id !== character.id);
         localStorage.setItem("characters", JSON.stringify(updated));
       }
+      setCoordinates((prev: any[]) => prev.filter((item) => item.id !== id));
     }
   }, [health[id]]);
 

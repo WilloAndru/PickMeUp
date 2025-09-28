@@ -28,12 +28,23 @@ export function generateEnemies(
   const enemies: Enemy[] = [];
   const enemyConfigs = enemiesByLevel[level - 1];
 
-  if (enemyConfigs) {
-    for (const config of enemyConfigs) {
-      for (let i = 0; i < config.quantity; i++) {
-        const { x, y } = getUniquePosition(cells, usedPositions);
-        enemies.push({ ...dataEnemies[config.index], x, y });
-      }
+  // --- Coordenada fija para el primer enemigo ---
+  const fixedX = 4; // ajusta a tu gusto
+  const fixedY = 1;
+  const fixedKey = `${fixedX},${fixedY}`;
+  usedPositions.add(fixedKey); // reservar casilla
+
+  // Tomamos el primer “tipo” de enemigo del nivel para esa posición
+  const firstConfig = enemyConfigs[0];
+  enemies.push({ ...dataEnemies[firstConfig.index], x: fixedX, y: fixedY });
+
+  // --- Resto de enemigos, aleatorios ---
+  for (const config of enemyConfigs) {
+    // ya colocamos uno del primer config, así que empezamos en 0 o 1 según el caso
+    const start = config === firstConfig ? 1 : 0;
+    for (let i = start; i < config.quantity; i++) {
+      const { x, y } = getUniquePosition(cells, usedPositions);
+      enemies.push({ ...dataEnemies[config.index], x, y });
     }
   }
 

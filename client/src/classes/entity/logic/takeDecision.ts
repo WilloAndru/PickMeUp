@@ -12,11 +12,8 @@ export const takeDecision = (
   const isNearToTargetEntiti = (() => {
     const dx = firstEntitiDetected.x - position.x / 27;
     const dy = firstEntitiDetected.y - position.y / 27;
-    console.log(character.name, dx, dy);
 
-    return (Math.abs(dx) === 1 && dy === 0) || (Math.abs(dy) === 1 && dx === 0)
-      ? true
-      : false;
+    return Math.abs(dx) <= 1 && Math.abs(dy) <= 1;
   })();
 
   // Forzamos la direccion logica para acercarse o alejarse de la entidad detectada

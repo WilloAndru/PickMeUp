@@ -10,7 +10,7 @@ export const dataEnemies = [
     brave: 10,
     level: 1,
     health: 1,
-    attack: 2,
+    attack: 1,
     colors: [
       "#4B8B3B", // piel (verde goblin)
       "#2F5E25", // piel sombra
