@@ -6,9 +6,11 @@ import { generateObjects } from "../utils/generateObjects";
 import { useZoom } from "../hooks/useZoom";
 import { useState, useEffect } from "react";
 import { usePan } from "../hooks/usePan";
-import PauseMenu from "../components/PauseMenu";
+import PauseMenu from "./PauseMenu";
 import { IoMenu } from "react-icons/io5";
 import { useEntities } from "../context/Context";
+import GameOver from "./GameOver";
+import ResultsMenu from "./ResultsMenu";
 
 function Battlefield() {
   const { level } = useParams();
@@ -24,6 +26,8 @@ function Battlefield() {
   const [selectedCharacters, setSelectedCharacters] = useState<any[]>([]);
   const [obstacles, setObstacles] = useState<any[]>([]);
   const [enemies, setEnemies] = useState<any[]>([]);
+  const [isOver, setIsOver] = useState(false);
+  const [earnedDiamonds, setEarnedDiamonds] = useState(0);
 
   const { setHealth } = useEntities();
 
@@ -92,6 +96,28 @@ function Battlefield() {
     });
   }, [level]);
 
+  // Funcion que se ejecuta cuando todos los enemigos han sido eliminados
+  useEffect(() => {
+    if (earnedDiamonds !== 0) {
+      let diamonds = JSON.parse(localStorage.getItem("diamonds") || "[]");
+      let lastClearedLevel = JSON.parse(
+        localStorage.getItem("lastClearedLevel") || "[]"
+      );
+      // Da los didmantes ganados y actualiza el ultimo nivel superado
+      if (level === lastClearedLevel) {
+        diamonds += Number(level) * 10;
+        localStorage.setItem(
+          "lastClearedLevel",
+          JSON.stringify(lastClearedLevel + 1)
+        );
+      } else {
+        diamonds += Number(level) * 2;
+      }
+      setEarnedDiamonds(diamonds);
+      localStorage.setItem("diamonds", JSON.stringify(diamonds));
+    }
+  }, [earnedDiamonds]);
+
   const { zoom, containerRef } = useZoom();
   const pan = usePan(zoom, widthTerrain);
 
@@ -105,6 +131,10 @@ function Battlefield() {
       </button>
 
       {isPause && <PauseMenu setIsPause={setIsPause} />}
+      {isOver && <GameOver />}
+      {earnedDiamonds > 0 && (
+        <ResultsMenu level={Number(level)} earnedDiamonds={earnedDiamonds} />
+      )}
 
       <section
         ref={containerRef}
@@ -127,6 +157,8 @@ function Battlefield() {
               initialX={item.x * cellSize}
               initialY={item.y * cellSize}
               isPause={isPause}
+              setIsOver={setIsOver}
+              setEarnedDiamonds={setEarnedDiamonds}
             />
           );
         })}
@@ -151,6 +183,8 @@ function Battlefield() {
             initialX={item.x * cellSize}
             initialY={item.y * cellSize}
             isPause={isPause}
+            setIsOver={setIsOver}
+            setEarnedDiamonds={setEarnedDiamonds}
           />
         ))}
       </section>

@@ -44,18 +44,12 @@ export function genereteNewCharacter(id: number) {
     const attrs = 2;
 
     const remaining = totalPoints - minPerAttr * attrs;
+    if (remaining < 0) return { health: 1, attack: 1 };
 
-    if (remaining < 0) {
-      return { health: 1, attack: 1 };
-    }
+    const cut = Math.floor(Math.random() * (remaining + 1));
 
-    const cut1 = Math.floor(Math.random() * (remaining + 1));
-    const cut2 = Math.floor(Math.random() * (remaining + 1));
-
-    const [first, second] = [cut1, cut2].sort((a, b) => a - b);
-
-    const health = minPerAttr + first;
-    const attack = minPerAttr + (second - first);
+    const health = minPerAttr + cut;
+    const attack = minPerAttr + (remaining - cut);
 
     return { health, attack };
   })();
