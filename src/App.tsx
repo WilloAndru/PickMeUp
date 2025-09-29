@@ -12,7 +12,7 @@ import { EntitiesProvider } from "./context/Context";
 const App = () => {
   return (
     <EntitiesProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/PickMeUp">
         <Routes>
           <Route element={<Home />} path="/" />
           <Route element={<Tower />} path="/tower" />
