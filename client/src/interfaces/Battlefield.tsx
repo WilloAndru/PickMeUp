@@ -12,6 +12,7 @@ import { useEntities } from "../context/Context";
 import GameOver from "./GameOver";
 import ResultsMenu from "./ResultsMenu";
 import { FaRegHandPointer } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function Battlefield() {
   const { level } = useParams();
@@ -31,6 +32,7 @@ function Battlefield() {
   const [earnedDiamonds, setEarnedDiamonds] = useState(0);
   const [stateInteraction, setStateInteraction] = useState(false);
   const [wasUseInteraction, setWasUseInteraction] = useState(false);
+  const navigate = useNavigate();
 
   const { setHealth } = useEntities();
 
@@ -99,7 +101,7 @@ function Battlefield() {
     });
   }, [level]);
 
-  // Funcion que se ejecuta cuando todos los enemigos han sido eliminados
+  // Funcion que se ejecuta cuadno se supero el nivel
   useEffect(() => {
     if (earnedDiamonds === 1) {
       let diamondsStores = JSON.parse(localStorage.getItem("diamonds") || "20");
@@ -137,6 +139,19 @@ function Battlefield() {
     return () => document.removeEventListener("keydown", exitStateInteractive);
   }, [stateInteraction]);
 
+  // Funcion que se ejecuta cuando se sale forzadamente del nivel
+  const handleDeleteCharacters = () => {
+    let chars = JSON.parse(localStorage.getItem("characters") || "[]");
+    const selectedIds = JSON.parse(
+      localStorage.getItem("selectedCharactersId") || "[]"
+    );
+    chars = chars.filter(
+      (_: any, index: number) => !selectedIds.includes(index)
+    );
+    localStorage.setItem("characters", JSON.stringify(chars));
+    navigate("/");
+  };
+
   const { zoom, containerRef } = useZoom();
   const pan = usePan(zoom, widthTerrain);
   return (
@@ -155,7 +170,12 @@ function Battlefield() {
         </button>
       </div>
 
-      {isPause && <PauseMenu setIsPause={setIsPause} />}
+      {isPause && (
+        <PauseMenu
+          setIsPause={setIsPause}
+          handleDeleteCharacters={handleDeleteCharacters}
+        />
+      )}
       {isOver && <GameOver />}
       {earnedDiamonds >= 1 && (
         <ResultsMenu level={Number(level)} earnedDiamonds={earnedDiamonds} />

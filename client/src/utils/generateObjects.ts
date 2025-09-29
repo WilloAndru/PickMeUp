@@ -29,25 +29,20 @@ export function generateEnemies(
   const enemyConfigs = enemiesByLevel[level - 1];
   if (!enemyConfigs) return enemies;
 
-  const firstConfig = enemyConfigs[0];
-
-  // ---- Primer enemigo en coordenada fija ----
-  const fixed1 = { x: 4, y: 1 }; // ajusta a gusto
-  usedPositions.add(`${fixed1.x},${fixed1.y}`);
-  enemies.push({ ...dataEnemies[firstConfig.index], ...fixed1 });
-
-  // ---- Segundo enemigo en otra coordenada fija ----
-  const fixed2 = { x: 7, y: 3 }; // ajusta a gusto
-  usedPositions.add(`${fixed2.x},${fixed2.y}`);
-  enemies.push({ ...dataEnemies[firstConfig.index], ...fixed2 });
-
-  // ---- Resto de enemigos en posiciones aleatorias ----
   for (const config of enemyConfigs) {
-    // si es el mismo tipo que los dos primeros, empezamos desde 2
-    const start = config === firstConfig ? 2 : 0;
-    for (let i = start; i < config.quantity; i++) {
+    for (let i = 0; i < config.quantity; i++) {
+      // Obtiene una posición libre al azar dentro del tablero
       const { x, y } = getUniquePosition(cells, usedPositions);
-      enemies.push({ ...dataEnemies[config.index], x, y });
+
+      // Guarda la posición para evitar duplicados
+      usedPositions.add(`${x},${y}`);
+
+      // Crea el enemigo según su índice de dataEnemies
+      enemies.push({
+        ...dataEnemies[config.index],
+        x,
+        y,
+      });
     }
   }
 

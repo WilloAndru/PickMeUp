@@ -1,25 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 type PauseMenuProps = {
   setIsPause: (value: boolean) => void;
+  handleDeleteCharacters: any;
 };
 
-function PauseMenu({ setIsPause }: PauseMenuProps) {
+function PauseMenu({ setIsPause, handleDeleteCharacters }: PauseMenuProps) {
   const [isHome, setIsHome] = useState(false);
-  const navigate = useNavigate();
-
-  const handleDeleteCharacters = () => {
-    let chars = JSON.parse(localStorage.getItem("characters") || "[]");
-    const selectedIds = JSON.parse(
-      localStorage.getItem("selectedCharactersId") || "[]"
-    );
-    chars = chars.filter(
-      (_: any, index: number) => !selectedIds.includes(index)
-    );
-    localStorage.setItem("characters", JSON.stringify(chars));
-    navigate("/");
-  };
 
   return (
     <div className="flex items-center justify-center w-full h-full absolute bg-black bg-opacity-50 z-10">
