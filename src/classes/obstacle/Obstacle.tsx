@@ -16,7 +16,7 @@ function Obstacle({ image, x, y, size }: ObstacleProps) {
         width: size,
       }}
     >
-      <img src={`/Obstacles/${image}`} alt="Obstacle" />
+      <img src={`${import.meta.env.BASE_URL}${image}`} alt="Obstacle" />
     </div>
   );
 }

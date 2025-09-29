@@ -22,18 +22,18 @@ export const CanvasEntity = ({ character, scale = 1 }: CanvasEntityProps) => {
 
     // Lista de las imagenes del cuerpo
     const images = [
-      "/Entity/black.png",
-      "/Entity/white.png",
-      "/Entity/gray.png",
-      "/Entity/skin.png",
-      "/Entity/skin-dark.png",
-      "/Entity/iris.png",
-      "/Entity/iris-dark.png",
-      "/Entity/clothe.png",
-      "/Entity/clothe-dark.png",
-      "/Entity/hair-light.png",
-      "/Entity/hair.png",
-      "/Entity/hair-dark.png",
+      `${import.meta.env.BASE_URL}black.png`,
+      `${import.meta.env.BASE_URL}white.png`,
+      `${import.meta.env.BASE_URL}gray.png`,
+      `${import.meta.env.BASE_URL}skin.png`,
+      `${import.meta.env.BASE_URL}skin-dark.png`,
+      `${import.meta.env.BASE_URL}iris.png`,
+      `${import.meta.env.BASE_URL}iris-dark.png`,
+      `${import.meta.env.BASE_URL}clothe.png`,
+      `${import.meta.env.BASE_URL}clothe-dark.png`,
+      `${import.meta.env.BASE_URL}hair-light.png`,
+      `${import.meta.env.BASE_URL}hair.png`,
+      `${import.meta.env.BASE_URL}hair-dark.png`,
     ];
 
     // Variables temporales
