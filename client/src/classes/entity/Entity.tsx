@@ -15,6 +15,7 @@ type EntityProps = {
   initialX: number;
   initialY: number;
   isPause: boolean;
+  isOver: boolean;
   setIsOver: any;
   earnedDiamonds: number;
   setEarnedDiamonds: any;
@@ -28,6 +29,7 @@ function Entity({
   initialX,
   initialY,
   isPause,
+  isOver,
   setIsOver,
   earnedDiamonds,
   setEarnedDiamonds,
@@ -45,6 +47,7 @@ function Entity({
     if (isPause) return;
     if (!isLive) return;
     if (earnedDiamonds >= 1) return;
+    if (isOver) return;
 
     const interval = setInterval(() => {
       // Hallamos la lista de enemigos y characters detectados
@@ -131,16 +134,26 @@ function Entity({
 
   // Verificamos si la entidad murio
   useEffect(() => {
-    console.log(character.name, health[id]);
     if (health[id] <= 0) {
       setIsLive(false);
       // Si muere un character lo eliminamos de la localStorage
       if (character.isCharacter) {
         const chars = JSON.parse(localStorage.getItem("characters") || "[]");
-        const updated = chars.filter((c: any) => c.id !== character.id);
-        localStorage.setItem("characters", JSON.stringify(updated));
+        const selectedIds = JSON.parse(
+          localStorage.getItem("selectedCharactersId") || "[]"
+        );
+        const selectedChars = selectedIds.map((i: number) => chars[i]);
+        const updatedChars = chars.filter((c: any) => c.id !== character.id);
+        localStorage.setItem("characters", JSON.stringify(updatedChars));
+        const updatedSelected = selectedChars.filter(
+          (c: any) => c.id !== character.id
+        );
+        localStorage.setItem(
+          "selectedCharactersId",
+          JSON.stringify(updatedSelected)
+        );
         // Si muere el ultimo personaje, activamos isOver
-        if (chars.length === 1) setIsOver(true);
+        if (updatedSelected.length === 0) setIsOver(true);
       }
       // Si todos los enemigos estan muertos entonces activamos interfaz de victoria
       else {

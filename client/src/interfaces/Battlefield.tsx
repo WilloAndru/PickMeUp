@@ -160,6 +160,7 @@ function Battlefield() {
               initialX={item.x * cellSize}
               initialY={item.y * cellSize}
               isPause={isPause}
+              isOver={isOver}
               setIsOver={setIsOver}
               earnedDiamonds={earnedDiamonds}
               setEarnedDiamonds={setEarnedDiamonds}
@@ -187,6 +188,7 @@ function Battlefield() {
             initialX={item.x * cellSize}
             initialY={item.y * cellSize}
             isPause={isPause}
+            isOver={isOver}
             setIsOver={setIsOver}
             earnedDiamonds={earnedDiamonds}
             setEarnedDiamonds={setEarnedDiamonds}

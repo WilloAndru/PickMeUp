@@ -6,7 +6,6 @@ function Tower() {
   const lastClearedLevel = JSON.parse(
     localStorage.getItem("lastClearedLevel") || "1"
   );
-  console.log(lastClearedLevel);
 
   // Generamos la lista de Links a los niveles
   let levels = [];

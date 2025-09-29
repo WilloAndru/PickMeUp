@@ -16,7 +16,7 @@ function Gacha() {
 
   const handlePull = () => {
     if (diamonts >= costPull) {
-      localStorage.setItem("diamonts", JSON.stringify(diamonts - costPull));
+      localStorage.setItem("diamonds", JSON.stringify(diamonts - costPull));
       let characters = JSON.parse(localStorage.getItem("characters") || "[]");
       const lastId = characters.at(-1)?.id || 0;
       const character = genereteNewCharacter(lastId + 1);
