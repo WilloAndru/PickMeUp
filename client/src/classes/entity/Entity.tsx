@@ -19,6 +19,9 @@ type EntityProps = {
   setIsOver: any;
   earnedDiamonds: number;
   setEarnedDiamonds: any;
+  stateInteraction: boolean;
+  setStateInteraction: any;
+  setWasUseInteraction: any;
 };
 
 function Entity({
@@ -33,6 +36,9 @@ function Entity({
   setIsOver,
   earnedDiamonds,
   setEarnedDiamonds,
+  stateInteraction,
+  setStateInteraction,
+  setWasUseInteraction,
 }: EntityProps) {
   const ratioMovement = 500;
   const [position, setPosition] = useState({ x: initialX, y: initialY });
@@ -41,10 +47,12 @@ function Entity({
   const [showInformation, setShowInformation] = useState(false);
   const [isLive, setIsLive] = useState(true);
   const { health, setHealth } = useEntities();
+  const [hover, setHover] = useState(false);
 
   // Configuramos el intervalo para mover la entidad automáticamente
   useEffect(() => {
     if (isPause) return;
+    if (stateInteraction) return;
     if (!isLive) return;
     if (earnedDiamonds >= 1) return;
     if (isOver) return;
@@ -130,7 +138,7 @@ function Entity({
     }, ratioMovement);
 
     return () => clearInterval(interval);
-  }, [isPause, position, health]);
+  }, [isPause, position, health, stateInteraction]);
 
   // Verificamos si la entidad murio
   useEffect(() => {
@@ -166,15 +174,41 @@ function Entity({
     }
   }, [health[id]]);
 
+  // Que ocurre cuando se le da click a la entidad
+  const handleClickEntity = () => {
+    // Si esta en estado para que el jugaador interactue con las entidades
+    if (stateInteraction) {
+      // Determina si se cura o se daña: +0.5 o -0.5 de la salud total
+      const delta = character.isCharacter ? 0.5 : -0.5;
+
+      setHealth((prev) => ({
+        ...prev,
+        [id]: prev[id] + character.health * delta,
+      }));
+
+      setWasUseInteraction(true);
+      setStateInteraction(false);
+      return;
+    }
+    // Si esta en el estado normal, permite el click para ver la informacion de la entidad
+    setShowInformation((show) => !show);
+  };
+
   return (
     <div
-      className="absolute z-100"
+      className="rounded-[8px] absolute z-100 border border-transparent hover:border-green-500"
       style={{
         display: isLive ? "flex" : "none",
         transform: `translate(${position.x}px, ${position.y}px)`,
         transition: `transform ${ratioMovement / 1000}s linear`,
+        border:
+          hover && stateInteraction
+            ? `2px solid ${character.isCharacter ? "lime" : "red"}`
+            : "2px solid transparent",
       }}
-      onClick={() => setShowInformation(!showInformation)}
+      onClick={handleClickEntity}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
       {showInformation && (
         <InformationEntity character={character} currentHealth={health[id]} />

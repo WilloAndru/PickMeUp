@@ -11,6 +11,7 @@ import { IoMenu } from "react-icons/io5";
 import { useEntities } from "../context/Context";
 import GameOver from "./GameOver";
 import ResultsMenu from "./ResultsMenu";
+import { FaRegHandPointer } from "react-icons/fa";
 
 function Battlefield() {
   const { level } = useParams();
@@ -28,6 +29,8 @@ function Battlefield() {
   const [enemies, setEnemies] = useState<any[]>([]);
   const [isOver, setIsOver] = useState(false);
   const [earnedDiamonds, setEarnedDiamonds] = useState(0);
+  const [stateInteraction, setStateInteraction] = useState(false);
+  const [wasUseInteraction, setWasUseInteraction] = useState(false);
 
   const { setHealth } = useEntities();
 
@@ -122,31 +125,60 @@ function Battlefield() {
     }
   }, [earnedDiamonds]);
 
+  // Funcion para salir del modo interactivo
+  useEffect(() => {
+    const exitStateInteractive = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && stateInteraction) {
+        setStateInteraction(false);
+      }
+    };
+
+    document.addEventListener("keydown", exitStateInteractive);
+    return () => document.removeEventListener("keydown", exitStateInteractive);
+  }, [stateInteraction]);
+
   const { zoom, containerRef } = useZoom();
   const pan = usePan(zoom, widthTerrain);
   return (
     <main className="bg-cyan-400 w-screen h-screen flex items-center justify-center overflow-hidden relative">
-      <button
-        onClick={() => setIsPause(true)}
-        className="link absolute top-4 right-4 z-10"
-      >
-        <IoMenu />
-      </button>
+      <div className="flex gap-3 absolute top-4 right-4 z-10">
+        {!wasUseInteraction && (
+          <button
+            onClick={() => setStateInteraction(!stateInteraction)}
+            className="link"
+          >
+            <FaRegHandPointer />
+          </button>
+        )}
+        <button onClick={() => setIsPause(true)} className="link">
+          <IoMenu />
+        </button>
+      </div>
 
       {isPause && <PauseMenu setIsPause={setIsPause} />}
       {isOver && <GameOver />}
       {earnedDiamonds >= 1 && (
         <ResultsMenu level={Number(level)} earnedDiamonds={earnedDiamonds} />
       )}
+      {stateInteraction && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 flex flex-col gap-2 items-center box">
+          <h1 className="text-lg">Interaction Mode</h1>
+          <h1 className="text-[12px]">
+            Select a character to heal half of their health, or select an enemy
+            to remove half of their health.
+          </h1>
+        </div>
+      )}
 
       <section
         ref={containerRef}
-        className="bg-lime-500 relative origin-center"
+        className="relative origin-center"
         style={{
           width: widthTerrain,
           height: widthTerrain,
           transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
           transition: "transform 0.2s ease-out",
+          background: stateInteraction ? "#78b815" : "#84cc16",
         }}
       >
         {selectedCharacters.map((item: any, index: number) => {
@@ -164,6 +196,9 @@ function Battlefield() {
               setIsOver={setIsOver}
               earnedDiamonds={earnedDiamonds}
               setEarnedDiamonds={setEarnedDiamonds}
+              stateInteraction={stateInteraction}
+              setStateInteraction={setStateInteraction}
+              setWasUseInteraction={setWasUseInteraction}
             />
           );
         })}
@@ -192,6 +227,9 @@ function Battlefield() {
             setIsOver={setIsOver}
             earnedDiamonds={earnedDiamonds}
             setEarnedDiamonds={setEarnedDiamonds}
+            stateInteraction={stateInteraction}
+            setStateInteraction={setStateInteraction}
+            setWasUseInteraction={setWasUseInteraction}
           />
         ))}
       </section>
