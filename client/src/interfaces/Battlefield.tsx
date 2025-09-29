@@ -98,12 +98,13 @@ function Battlefield() {
 
   // Funcion que se ejecuta cuando todos los enemigos han sido eliminados
   useEffect(() => {
-    if (earnedDiamonds !== 0) {
-      let diamonds = JSON.parse(localStorage.getItem("diamonds") || "[]");
+    if (earnedDiamonds === 1) {
+      let diamondsStores = JSON.parse(localStorage.getItem("diamonds") || "20");
+      let diamonds = 0;
       let lastClearedLevel = JSON.parse(
         localStorage.getItem("lastClearedLevel") || "[]"
       );
-      // Da los didmantes ganados y actualiza el ultimo nivel superado
+      // Da los diamantes ganados y actualiza el ultimo nivel superado
       if (level === lastClearedLevel) {
         diamonds += Number(level) * 10;
         localStorage.setItem(
@@ -114,13 +115,15 @@ function Battlefield() {
         diamonds += Number(level) * 2;
       }
       setEarnedDiamonds(diamonds);
-      localStorage.setItem("diamonds", JSON.stringify(diamonds));
+      localStorage.setItem(
+        "diamonds",
+        JSON.stringify(diamonds + diamondsStores)
+      );
     }
   }, [earnedDiamonds]);
 
   const { zoom, containerRef } = useZoom();
   const pan = usePan(zoom, widthTerrain);
-
   return (
     <main className="bg-cyan-400 w-screen h-screen flex items-center justify-center overflow-hidden relative">
       <button
@@ -132,7 +135,7 @@ function Battlefield() {
 
       {isPause && <PauseMenu setIsPause={setIsPause} />}
       {isOver && <GameOver />}
-      {earnedDiamonds > 0 && (
+      {earnedDiamonds >= 1 && (
         <ResultsMenu level={Number(level)} earnedDiamonds={earnedDiamonds} />
       )}
 
@@ -158,6 +161,7 @@ function Battlefield() {
               initialY={item.y * cellSize}
               isPause={isPause}
               setIsOver={setIsOver}
+              earnedDiamonds={earnedDiamonds}
               setEarnedDiamonds={setEarnedDiamonds}
             />
           );
@@ -184,6 +188,7 @@ function Battlefield() {
             initialY={item.y * cellSize}
             isPause={isPause}
             setIsOver={setIsOver}
+            earnedDiamonds={earnedDiamonds}
             setEarnedDiamonds={setEarnedDiamonds}
           />
         ))}

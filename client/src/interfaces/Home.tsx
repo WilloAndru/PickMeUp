@@ -3,14 +3,16 @@ import { Link } from "react-router-dom";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 
 function Home() {
+  // Use de prueba
   useEffect(() => {
     //localStorage.removeItem("characters");
-    localStorage.setItem("lastClearedLevel", JSON.stringify(10));
+    //localStorage.setItem("lastClearedLevel", JSON.stringify(10));
   }, []);
 
   const deleteData = () => {
     localStorage.removeItem("characters");
     localStorage.removeItem("diamonds");
+    localStorage.removeItem("lastClearedLevel");
     window.location.reload();
   };
 

@@ -14,6 +14,7 @@ function DetailsCharacter() {
   const [newCharacter, setNewCharacter] = useState(character);
   const [isEditMode, setIsEditMode] = useState(false);
   const [countDiamonds, setCountDiamonds] = useState(0);
+  const cost = 5; // Costo de diamantes por mejora de atributo
 
   // Cuando se quieran comfirmar los cambios de las estadisticas
   const handleUpdateStatistics = () => {
@@ -32,7 +33,7 @@ function DetailsCharacter() {
           <h1 className="text-4xl flex gap-2">
             Level
             <span className={countDiamonds !== 0 ? "text-green-500" : ""}>
-              {character.level + countDiamonds / 2}
+              {character.level + countDiamonds / cost}
             </span>
           </h1>
           <CanvasEntity character={character} scale={8} />
@@ -49,6 +50,7 @@ function DetailsCharacter() {
         </div>
         <div className="box flex flex-col justify-between gap-2">
           <Statistic
+            cost={cost}
             attribute="Health"
             attributeValue={character.health}
             index={0}
@@ -57,6 +59,7 @@ function DetailsCharacter() {
             setNewCharacter={setNewCharacter}
           />
           <Statistic
+            cost={cost}
             attribute="Attack"
             attributeValue={character.attack}
             index={1}
@@ -65,6 +68,7 @@ function DetailsCharacter() {
             setNewCharacter={setNewCharacter}
           />
           <Statistic
+            cost={cost}
             attribute="Curiosity"
             attributeValue={character.curiosity}
             index={2}
@@ -73,6 +77,7 @@ function DetailsCharacter() {
             setNewCharacter={setNewCharacter}
           />
           <Statistic
+            cost={cost}
             attribute="Sociable"
             attributeValue={character.sociable}
             index={3}
@@ -81,6 +86,7 @@ function DetailsCharacter() {
             setNewCharacter={setNewCharacter}
           />
           <Statistic
+            cost={cost}
             attribute="Brave"
             attributeValue={character.brave}
             index={4}

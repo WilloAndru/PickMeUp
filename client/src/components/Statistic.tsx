@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { listAttributes, icons } from "../data/dataStatistics";
 
 type StatisticProps = {
+  cost: number;
   attribute: string;
   attributeValue: number;
   index: number;
@@ -10,7 +11,8 @@ type StatisticProps = {
   setNewCharacter: React.Dispatch<React.SetStateAction<any>>;
 };
 
-function Statistic({
+export default function Statistic({
+  cost,
   attribute,
   attributeValue,
   index,
@@ -18,48 +20,47 @@ function Statistic({
   setCountDiamonds,
   setNewCharacter,
 }: StatisticProps) {
-  const limitDiamonds = JSON.parse(localStorage.getItem("diamonds") || "20");
+  const limitDiamonds = Number(localStorage.getItem("diamonds") || "20");
   const Icon = icons[index];
-  const [diamondComponent, setDiamondComponent] = useState(0); // Los diamantes invertidos en el atributo
-  let levelAttribute = attributeValue + diamondComponent / 4;
+  const [levelsAdded, setLevelsAdded] = useState(0); // Niveles del personaje
+  const displayedLevel = attributeValue + levelsAdded; // Nivel actual del atributo
 
   useEffect(() => {
-    setDiamondComponent(0);
+    setLevelsAdded(0);
   }, [isEditMode]);
 
-  // Logica de subir o bajar estadistica
-  const handleLevelUp = (isPlus: boolean) => {
-    // Actualizamos la cantidad de diamantes a gastar general
-    setCountDiamonds((prev) => {
-      // Si es para subir atributo
-      if (isPlus) {
-        // Si no exedemos el limite de diamantes disponibles, ni superamos el nivel 10 de atributo
-        if (prev < limitDiamonds && levelAttribute < 10) {
-          setDiamondComponent((prev) => prev + 2);
-          setNewCharacter((prev: any) => ({
-            ...prev,
-            level: prev.level + 0.5,
-            [listAttributes[index]]: prev[listAttributes[index]] + 0.5,
-          }));
-          return prev + 2;
-        } else {
-          return prev;
-        }
-      }
-      // Si es para bajar atributo
-      else {
-        if (diamondComponent > 0) {
-          setDiamondComponent((prev) => prev - 2);
-          setNewCharacter((prev: any) => ({
-            ...prev,
-            level: prev.level - 0.5,
-            [listAttributes[index]]: prev[listAttributes[index]] - 0.5,
-          }));
-          return prev - 2;
-        } else {
-          return prev;
-        }
-      }
+  const addLevel = () => {
+    const maxAddable = 10 - attributeValue;
+    if (levelsAdded >= maxAddable) return;
+
+    setCountDiamonds((spentSoFar) => {
+      const available = limitDiamonds - spentSoFar;
+      if (available < cost) return spentSoFar;
+      setLevelsAdded((l) => l + 1);
+      setNewCharacter((prev: any) => ({
+        ...prev,
+        level: prev.level + 1,
+        [listAttributes[index]]: prev[listAttributes[index]] + 1,
+      }));
+
+      return spentSoFar + cost;
+    });
+  };
+
+  const removeLevel = () => {
+    if (levelsAdded <= 0) return;
+
+    setCountDiamonds((spentSoFar) => {
+      if (spentSoFar < cost) return spentSoFar;
+
+      setLevelsAdded((l) => l - 1);
+      setNewCharacter((prev: any) => ({
+        ...prev,
+        level: prev.level - 1,
+        [listAttributes[index]]: prev[listAttributes[index]] - 1,
+      }));
+
+      return spentSoFar - cost;
     });
   };
 
@@ -68,21 +69,22 @@ function Statistic({
       <h1 className="text-4xl flex gap-2 p-2">
         <Icon />
         {attribute}:
-        <span className={diamondComponent !== 0 ? "text-green-500" : ""}>
-          {attributeValue + diamondComponent / 4}
+        <span className={levelsAdded !== 0 ? "text-green-500" : ""}>
+          {displayedLevel}
         </span>
       </h1>
+
       {isEditMode && (
         <div className="flex gap-2">
           <button
-            className="w-12 h-13 border-4 border-[var(--color-gold)] rounded-2xl hover:border-[var(--color-gold-hover)]"
-            onClick={() => handleLevelUp(false)}
+            className="w-12 border-4 border-[var(--color-gold)] rounded-2xl"
+            onClick={removeLevel}
           >
-            -
+            −
           </button>
           <button
-            className="w-12 h-13 border-4 border-[var(--color-gold)] rounded-2xl hover:border-[var(--color-gold-hover)]"
-            onClick={() => handleLevelUp(true)}
+            className="w-12 border-4 border-[var(--color-gold)] rounded-2xl"
+            onClick={addLevel}
           >
             +
           </button>
@@ -91,5 +93,3 @@ function Statistic({
     </section>
   );
 }
-
-export default Statistic;

@@ -27,21 +27,24 @@ export function generateEnemies(
 ): Enemy[] {
   const enemies: Enemy[] = [];
   const enemyConfigs = enemiesByLevel[level - 1];
+  if (!enemyConfigs) return enemies;
 
-  // --- Coordenada fija para el primer enemigo ---
-  const fixedX = 4; // ajusta a tu gusto
-  const fixedY = 1;
-  const fixedKey = `${fixedX},${fixedY}`;
-  usedPositions.add(fixedKey); // reservar casilla
-
-  // Tomamos el primer “tipo” de enemigo del nivel para esa posición
   const firstConfig = enemyConfigs[0];
-  enemies.push({ ...dataEnemies[firstConfig.index], x: fixedX, y: fixedY });
 
-  // --- Resto de enemigos, aleatorios ---
+  // ---- Primer enemigo en coordenada fija ----
+  const fixed1 = { x: 4, y: 1 }; // ajusta a gusto
+  usedPositions.add(`${fixed1.x},${fixed1.y}`);
+  enemies.push({ ...dataEnemies[firstConfig.index], ...fixed1 });
+
+  // ---- Segundo enemigo en otra coordenada fija ----
+  const fixed2 = { x: 7, y: 3 }; // ajusta a gusto
+  usedPositions.add(`${fixed2.x},${fixed2.y}`);
+  enemies.push({ ...dataEnemies[firstConfig.index], ...fixed2 });
+
+  // ---- Resto de enemigos en posiciones aleatorias ----
   for (const config of enemyConfigs) {
-    // ya colocamos uno del primer config, así que empezamos en 0 o 1 según el caso
-    const start = config === firstConfig ? 1 : 0;
+    // si es el mismo tipo que los dos primeros, empezamos desde 2
+    const start = config === firstConfig ? 2 : 0;
     for (let i = start; i < config.quantity; i++) {
       const { x, y } = getUniquePosition(cells, usedPositions);
       enemies.push({ ...dataEnemies[config.index], x, y });

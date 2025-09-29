@@ -16,6 +16,7 @@ type EntityProps = {
   initialY: number;
   isPause: boolean;
   setIsOver: any;
+  earnedDiamonds: number;
   setEarnedDiamonds: any;
 };
 
@@ -28,6 +29,7 @@ function Entity({
   initialY,
   isPause,
   setIsOver,
+  earnedDiamonds,
   setEarnedDiamonds,
 }: EntityProps) {
   const ratioMovement = 500;
@@ -42,6 +44,7 @@ function Entity({
   useEffect(() => {
     if (isPause) return;
     if (!isLive) return;
+    if (earnedDiamonds >= 1) return;
 
     const interval = setInterval(() => {
       // Hallamos la lista de enemigos y characters detectados
@@ -138,14 +141,13 @@ function Entity({
         localStorage.setItem("characters", JSON.stringify(updated));
         // Si muere el ultimo personaje, activamos isOver
         if (chars.length === 1) setIsOver(true);
-        // Si todos los enemigos estan muertos entonces activamos interfaz de victoria
-        else {
-          const isAllEnemiesDead = Object.entries(health)
-            .filter(([key]) => Number(key) >= 4)
-            .every(([_, value]) => value === 0);
-          if (isAllEnemiesDead) setEarnedDiamonds(1);
-          console.log("Son todos los enemigos muertos", isAllEnemiesDead);
-        }
+      }
+      // Si todos los enemigos estan muertos entonces activamos interfaz de victoria
+      else {
+        const isAllEnemiesDead = Object.entries(health)
+          .filter(([k]) => Number(k) >= 4)
+          .every(([_, v]) => Number(v) <= 0);
+        if (isAllEnemiesDead) setEarnedDiamonds(1);
       }
       setCoordinates((prev: any[]) => prev.filter((item) => item.id !== id));
     }

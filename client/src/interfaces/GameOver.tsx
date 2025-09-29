@@ -8,6 +8,7 @@ function GameOver() {
       <section className="flex flex-col box gap-4 z-20 text-center w-2/3 md:w-1/3">
         <h1>Game Over</h1>
         <button
+          className="link"
           onClick={() => {
             navigate("/");
           }}
